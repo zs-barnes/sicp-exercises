@@ -47,9 +47,10 @@
 ((fixed-point (lambda (x) (average (/ (log 1000) (log x)) (log x))) 10)
 (fixed-point (lambda (x) (average (/ (log 1000) (log x)) x))) 2)
 (fixed-point (lambda (x) (average (/ (log 1000) (log x)) x)) 2)
-(fixed-point (lambda (x) (average (/ (log 1000) (log x)) (log x)) 2)
+(fixed-point (lambda (x) (/ (log 1000) (log x))) 2)
+(fixed-point (lambda (x) (average (/ (log 1000) (log x)) x) 2))
 (define (average x y)
-(/ (+ x y) 2))
+  (/ (+ x y) 2))
 
 (define (cont-frac n d k)
   (define (cont-frac-iter n d k i)
@@ -59,3 +60,4 @@
   (cont-frac-iter n d k 1))
 
 (/ 1 (cont-frac (lambda (i) 1) (lambda (i) 1) 100))
+
