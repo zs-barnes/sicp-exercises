@@ -857,7 +857,7 @@ When running (f f), we recieve the error "the object 2 is not applicable" This i
 as itself evaluates to 2, which is then applied as an operater in the final f, but because 2 is a primitive, we cannot use it as a function.
 
 ## Exercise 1.35
-A fixed point is when f(x) = x. In this case f(x) is x -> 1 + 1/x. Here's the algebra to prove it:
+A fixed point is when f(x) = x. In this case f(x) is x -> 1 + 1/x, so if we plug in $\phi$ and receive the same value, then it is a fixed point of f(x). Here's the algebra:
 $$ \phi = \frac{1 + \sqrt{5}}{2} $$
 $$ f(\phi) = 1 +  \frac{2}{1 + \sqrt{5}} $$
 $$ = 1 + \frac{2(1 - \sqrt{5})}{(1 + \sqrt{5})(1 - \sqrt{5})}$$
@@ -866,81 +866,20 @@ $$ = 1 - \frac{1}{2} + \frac{\sqrt{5}}{2}$$
 $$ = 1 + \frac{-1 + \sqrt{5}}{2}$$
 $$ = \frac{1 + \sqrt{5}}{2}$$
 
-Computation of $\phi$ using fixed-point:
+Here is the computation of $\phi$ with fixed-point, and a starting guess of 1:
 ```
-1 ]=> (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0)
+1 ]=> (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0))
 
 ;Value: 1.6180327868852458
 ```
 
-## Exercise 1.36
-Modified fixed-point to display guesses:
+## Exercise  1.37
+Here is a recursive implementation of cont-frac:
 ```
-(define tolerance 0.00001)
-(define (fixed-point f first-guess)
-  (define (close-enough? v1 v2)
-    (< (abs (- v1 v2)) tolerance))
-  (define (try guess)
-    (let ((next (f guess)))
-    (newline)
-    (display next)
-      (if (close-enough? guess next)
-          next
-          (try next))))
-  (try first-guess))
-```
-It takes about 33 steps to guess without average damping:
-```
-1 ]=> (fixed-point (lambda (x) (/ (log 1000) (log x))) 2)
-
-9.965784284662087
-3.004472209841214
-6.279195757507157
-3.759850702401539
-5.215843784925895
-4.182207192401397
-4.8277650983445906
-4.387593384662677
-4.671250085763899
-4.481403616895052
-4.6053657460929
-4.5230849678718865
-4.577114682047341
-4.541382480151454
-4.564903245230833
-4.549372679303342
-4.559606491913287
-4.552853875788271
-4.557305529748263
-4.554369064436181
-4.556305311532999
-4.555028263573554
-4.555870396702851
-4.555315001192079
-4.5556812635433275
-4.555439715736846
-4.555599009998291
-4.555493957531389
-4.555563237292884
-4.555517548417651
-4.555547679306398
-4.555527808516254
-4.555540912917957
-4.555532270803653
-;Value: 4.555532270803653
-```
-It takes 9 steps with average damping, where we average between the original function log(1000)/log(x) and x.
-```
-1 ]=> (fixed-point (lambda (x) (average (/ (log 1000) (log x)) x)) 2)
-
-5.9828921423310435
-4.922168721308343
-4.628224318195455
-4.568346513136242
-4.5577305909237005
-4.555909809045131
-4.555599411610624
-4.5555465521473675
-4.555537551999825
-;Value: 4.555537551999825
+(define (cont-frac n d k)
+  (define (cont-frac-iter n d k i)
+    (if (> i k)
+      0
+      (+ (/ (n i) (+ (d i) (cont-frac-iter n d k (+ i 1)))))))
+  (cont-frac-iter n d k 1))
 ```
