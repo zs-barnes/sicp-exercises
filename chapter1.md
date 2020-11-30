@@ -955,7 +955,7 @@ Here is a recursive implementation of cont-frac:
   (define (cont-frac-iter n d k i)
     (if (> i k)
       0
-      (+ (/ (n i) (+ (d i) (cont-frac-iter n d k (+ i 1)))))))
+      (/ (n i) (+ (d i) (cont-frac-iter n d k (+ i 1))))))
   (cont-frac-iter n d k 1))
 ```
 K must be 12 to approxmiate the golden ration to 4 decimal places:
