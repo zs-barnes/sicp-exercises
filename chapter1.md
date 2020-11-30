@@ -1040,3 +1040,27 @@ Finally, here is the approximation of $e$ using cont-frac:
 ;Value: 2.7182817182817183
 ```
 Phew, it works! I add to becuase this continued fraction expansion is for  $e - 2$.
+
+## Exercise 1.38
+Here's my attempt, but something is off.
+```
+(define (tan-cf x k)
+  (define (cont-frac n d k)
+    (define (cont-frac-iter n d k result)
+      (if (= k 0)
+      result
+      (cont-frac-iter n d (- k 1) (/ (n k) (- (d x k) result)))))
+    (cont-frac-iter n d k 0))
+  (define (d-func x i)
+    (if (= i 1)
+      x
+      (square x)))
+  (cont-frac (lambda (i) (- (* 2 i) 1)) d-func k))
+```
+
+This value should be much closer to zero.
+```
+1 ]=> (tan-cf 3.14 10)
+
+;Value: .3548998371326001
+```

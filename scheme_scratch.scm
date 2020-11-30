@@ -101,24 +101,32 @@
 (+ (cont-frac (lambda (i) 1) d-func 10) 2.0)
 
 (define (tan-cf x k)
-(define (cont-frac n d k)
-  (define (cont-frac-iter n d k i)
-    (if (> i k)
-      0
-      (+ (/ (n i) (- (d x i) (cont-frac-iter n d k (+ i 1)))))))
-  (cont-frac-iter n d k 1))
+  (define (cont-frac n d k)
+    (define (cont-frac-iter n d k result)
+      (if (= k 0)
+      result
+      (cont-frac-iter n d (- k 1) (/ (n k) (- (d x k) result)))))
+    (cont-frac-iter n d k 0))
+  (define (d-func x i)
+    (if (= i 1)
+      x
+      (square x)))
+  (cont-frac (lambda (i) (- (* 2 i) 1)) d-func k))
+
+
+# decouple 
+
+(define (cont-frac n d k x)
+  (define (cont-frac-iter n d k result)
+    (if (= k 0)
+    result
+    (cont-frac-iter n d (- k 1) (/ (n k) (- (d x k) result)))))
+  (cont-frac-iter n d k 0))
+
 (define (d-func x i)
   (if (= i 1)
     x
     (square x)))
-(cont-frac (lambda (i) (- (* 2 i) 1)) d-func k)
-)
 
-
-(define (d-func x i)
-(if (= x 1)
-  x
-  (square x)))
-
-(define (test i)
-(- (* 2 i) 1))
+(define (tan-cf x k)
+(cont-frac (lambda (i) (- (* 2 i) 1)) d-func k x ))
