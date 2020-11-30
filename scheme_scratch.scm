@@ -61,3 +61,41 @@
 
 (/ 1 (cont-frac (lambda (i) 1) (lambda (i) 1) 100))
 
+(/ 1.0 (cont-frac (lambda (i) 1) (lambda (i) 1) 14))
+
+(define (cont-frac n d k)
+  (define (cont-frac-iter n d k result)
+    (if (= k 0)
+      result
+      (cont-frac-iter n d (- k 1) (/ (n k) (+ result (d k))))
+      
+    )
+  (cont-frac-iter n d k 0))
+)
+
+(/ 1.0 (cont-frac (lambda (i) 1) (lambda (i) 1) 13))
+(/ 1.0 (cont-frac (lambda (i) 1) (lambda (i) 1) 14))
+(/ 1.0 (cont-frac (lambda (i) 1) (lambda (i) 1) 11))
+
+
+(define (cont-frac n d k)
+  (define (cont-frac-iter n d k result)
+    (if (= k 0)
+    result
+    (cont-frac-iter n d (- k 1) (/ (n k) (+ result (d k))))))
+  (cont-frac-iter n d k 0))
+  
+(define (d-func i)
+  (cond ((< i 3) i)
+        ((or (= 0 (remainder i 3)) (= 1 (remainder i 3))) 1)
+        (else (- i (/ (- i 2) 3)))))
+
+
+(define (d-func-iter i k)
+  (newline)
+  (display (d-func i))
+  (if (= i k)
+    (display "done")
+    (d-func-iter (+ i 1) k)))
+(d-func-iter 1 14)
+(+ (cont-frac (lambda (i) 1) d-func 10) 2.0)

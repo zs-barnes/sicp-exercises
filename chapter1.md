@@ -958,3 +958,85 @@ Here is a recursive implementation of cont-frac:
       (+ (/ (n i) (+ (d i) (cont-frac-iter n d k (+ i 1)))))))
   (cont-frac-iter n d k 1))
 ```
+K must be 12 to approxmiate the golden ration to 4 decimal places:
+```
+1 ]=> (/ 1.0 (cont-frac (lambda (i) 1) (lambda (i) 1) 11))
+
+;Value: 1.6179775280898876
+
+1 ]=> (/ 1.0 (cont-frac (lambda (i) 1) (lambda (i) 1) 12))
+
+;Value: 1.6180555555555554
+```
+
+Here is the iterative implementation of cont-frac (sorry for the same naming..). The results are the same, with k=12 being enough for 4 decimal places.
+```
+(define (cont-frac n d k)
+  (define (cont-frac-iter n d k result)
+    (if (= k 0)
+    result
+    (cont-frac-iter n d (- k 1) (/ (n k) (+ result (d k))))))
+  (cont-frac-iter n d k 0))
+```
+This was interesting because to me it made more sense for the accumulations to start from the end (the "bottom" of the continued fraction), and build back up, compared to the recursive version, which starts from the top, and accumlates down the continued fraction.
+
+## Exercise 1.38
+The fun of this exercise was figuring out how to express $D_{i}$ as a function of i. The solution I came up is a little strange, but I like its jankiness. 
+
+```
+(define (d-func i)
+  (cond ((< i 3) i)
+        ((or (= 0 (remainder i 3)) (= 1 (remainder i 3))) 1)
+        (else (- i (/ (- i 2) 3)))))
+```
+I looked at the pattern 1, 2, 1, 1, 4, 1, 1, 6, 1, 1, 8, and saw that if we give each number an index starting at 1, I could calculate the non 1's by subtracting 2 from the requested index, divide the result number by 3, and then finally subtract that result from the request index. That's a lot, its easier to see with some examples:
+
+
+$$i = 8 \ (should\ return \ 6) $$
+$$8 - 2 = 6$$
+$$6 / 3 = 2$$
+$$8 - 2 = 6$$
+$$return \,6$$
+$$i = 11 \ (should \ return \ 8)$$
+$$11 - 2 = 9$$
+$$9 / 3 = 3$$
+$$11 - 3 = 8$$
+$$return \ 8$$
+
+For the numbers less than 3, I return i, and for the rest of the numbers, I check if that number mod 3 is 0 or 1, and if it is I return 1. 
+
+I wrote a loop to make sure its doing what I think:
+```
+(define (d-func-iter i k)
+  (newline)
+  (display (d-func i))
+  (if (= i k)
+    (display 'done)
+    (d-func-iter (+ i 1) k)))
+```
+```
+1 ]=> (d-func-iter 1 14)
+
+1
+2
+1
+1
+4
+1
+1
+6
+1
+1
+8
+1
+1
+10done
+;Unspecified return value
+```
+Finally, here is the approximation of $e$ using cont-frac:
+```
+1 ]=> (+ (cont-frac (lambda (i) 1) d-func 10) 2.0)
+
+;Value: 2.7182817182817183
+```
+Phew, it works! I add to becuase this continued fraction expansion is for  $e - 2$.
