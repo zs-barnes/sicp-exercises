@@ -157,7 +157,7 @@ It doesn't evaluate immediately, and once my fan started running I killed the re
 (define (sqrt x)
   (sqrt-iter 1.0 2.0 x))
 ```
-This was tricky but satisfying. Coming from a more procedural background, I was stuck thinking about how to pass on the previous iteration's variable through recursion. I added a pre-guess variable to the sqrt-iter function's arguments and iniatialize the pre-guess to 2.0 (but really any number that's not the same as the guess will do). 
+This was tricky but satisfying. Coming from a procedural background, I was stuck thinking about how to pass on the previous iteration's variable through recursion. I added a pre-guess variable to the sqrt-iter function's arguments and iniatialize the pre-guess to 2.0 (but really any number that's not the same as the guess will do). 
 
 I then pass along guess in the recursive call in the prev-guess argument. So now, each call of the sqrt-iter takes in the improved guess and the prev-guess. 
 
@@ -321,7 +321,7 @@ With big O this is num_nodes = 2^h. Since num_nodes is bounded by 2^n, we can se
 ![](count_change_tree.jpg)
 
 ## Exercise 1.15
-a. Based on the subsitiion model, the procedure p will be applied 5 times:
+a. Based on the substitution model, the procedure p will be applied 5 times:
 
 ```
 (sine 12.15)
@@ -408,7 +408,9 @@ T(b) = (bp + aq)p + (bq + aq + ap)q
 
 = b(p^2 + q^2) + a(2pq + q^2)
 
-So p' = p^2 + q^2, and q' = 2pq + q^2. In Scheme:
+So p' = p^2 + q^2, and q' = 2pq + q^2.
+
+ In Scheme:
 
 ```
 p' = (+ (square p) (square q))
@@ -657,7 +659,7 @@ Instead of T(n) = 1 + T(n/2), which evaluates to O(log n), where we cut amount o
 we now instead have T(n) = 1 + T(n/2) + T(n/2), which evaluates to O(n)
 
 ## Exercise 1.27
-Here is my implementation of a test that uses to check for a carmichael number:
+Here is my implementation of a test to check for a carmichael number:
 ```
 (define (carmichael n)
   (carmichael-iter n 2))
@@ -1039,7 +1041,7 @@ Finally, here is the approximation of $e$ using cont-frac:
 
 ;Value: 2.7182817182817183
 ```
-Phew, it works! I add two becuase this continued fraction expansion is for  $e - 2$.
+Phew, it works! I add two because this continued fraction expansion is for  $e - 2$.
 
 ## Exercise 1.38
 This one took a little longer than I thought, but only because I made the silly mistake of swapping d with n.
