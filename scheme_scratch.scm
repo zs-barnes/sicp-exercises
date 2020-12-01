@@ -102,16 +102,16 @@
 
 (define (tan-cf x k)
   (define (cont-frac n d k)
-    (define (cont-frac-iter n d k result)
-      (if (= k 0)
-      result
-      (cont-frac-iter n d (- k 1) (/ (n k) (- (d x k) result)))))
-    (cont-frac-iter n d k 0))
-  (define (d-func x i)
+    (define (cont-frac-iter n d k i)
+      (if (> i k)
+        0
+        (/ (n x i) (- (d i) (cont-frac-iter n d k (+ i 1))))))
+    (cont-frac-iter n d k 1))
+  (define (n-func x i)
     (if (= i 1)
       x
       (square x)))
-  (cont-frac (lambda (i) (- (* 2 i) 1)) d-func k))
+  (cont-frac n-func (lambda (i) (- (* 2 i) 1)) k))
 
 
 # decouple 
@@ -130,3 +130,7 @@
 
 (define (tan-cf x k)
 (cont-frac (lambda (i) (- (* 2 i) 1)) d-func k x ))
+
+(define (odds i)
+(- (* 2 i) 1))
+

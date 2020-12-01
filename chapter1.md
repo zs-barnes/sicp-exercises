@@ -1039,28 +1039,39 @@ Finally, here is the approximation of $e$ using cont-frac:
 
 ;Value: 2.7182817182817183
 ```
-Phew, it works! I add to becuase this continued fraction expansion is for  $e - 2$.
+Phew, it works! I add two becuase this continued fraction expansion is for  $e - 2$.
 
 ## Exercise 1.38
-Here's my attempt, but something is off.
+This one took a little longer than I thought, but only because I made the silly mistake of swapping d with n.
 ```
 (define (tan-cf x k)
   (define (cont-frac n d k)
-    (define (cont-frac-iter n d k result)
-      (if (= k 0)
-      result
-      (cont-frac-iter n d (- k 1) (/ (n k) (- (d x k) result)))))
-    (cont-frac-iter n d k 0))
-  (define (d-func x i)
+    (define (cont-frac-iter n d k i)
+      (if (> i k)
+        0
+        (/ (n x i) (- (d i) (cont-frac-iter n d k (+ i 1))))))
+    (cont-frac-iter n d k 1))
+  (define (n-func x i)
     (if (= i 1)
       x
       (square x)))
-  (cont-frac (lambda (i) (- (* 2 i) 1)) d-func k))
+  (cont-frac n-func (lambda (i) (- (* 2 i) 1)) k))
 ```
-
-This value should be much closer to zero.
+Here it is working for 0, $\frac{\pi}{6}$, $\frac{\pi}{4}$, and $\pi$:
 ```
-1 ]=> (tan-cf 3.14 10)
+1 ]=> (tan-cf 0 10)
 
-;Value: .3548998371326001
+;Value: 0
+
+1 ]=> (tan-cf (/ 3.14159 6) 10)
+
+;Value: .5773496795031555
+
+1 ]=> (tan-cf (/ 3.14159 4) 10)
+
+;Value: .9999986732059835
+
+1 ]=> (tan-cf 3.14159 10)
+
+;Value: -2.6554829755074223e-6
 ```
