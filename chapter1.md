@@ -1099,3 +1099,16 @@ So $\sqrt{6} \approx 2.449$ is a solution.
 ;Value: 2.449489742783251
 ```
 
+## Exercise 1.41
+```
+(define (double f)
+  (lambda (x) (f (f x))))
+(define (inc x) (+ x 1))
+```
+```
+1 ]=> (((double (double double)) inc) 5)
+
+;Value: 21
+```
+The first (double double) adds 4 to argument given, but the third double squares 4, so it adds 16 + 5 = 21.
+

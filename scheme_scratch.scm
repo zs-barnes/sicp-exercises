@@ -144,4 +144,10 @@
   (define (cubic a b c)
     (lambda (x) (+ (* x x x) (* a (square x)) (* b x) c)))
 
-(newtons-method (cubic 3 (- 6) (- 18)) 10)
+(newtons-method (cubic 3 (- 6) (- 18)) 1)
+
+(define (double f)
+  (lambda (x) (f (f x))))
+(define (inc x) (+ x 1))
+(((double double) inc) 1)
+(((double (double (double double))) inc) 5)
