@@ -931,7 +931,7 @@ Without average damping, fixed-point takes 33 guesses when starting with guess 2
 4.555532270803653
 ;Value: 4.555532270803653
 ```
-To make an average damping version of this function, we average the original function with the previous guess, x. This cuts down the number of guesses from 33 to 8:
+To make an average damping version of this function, we take the average of the original function and x. This cuts down the number of guesses from 33 to 8:
 ```
 (define (average x y)
   (/ (+ x y) 2))
@@ -1043,7 +1043,7 @@ Finally, here is the approximation of $e$ using cont-frac:
 ```
 Phew, it works! I add two because this continued fraction expansion is for  $e - 2$.
 
-## Exercise 1.38
+## Exercise 1.39
 This one took a little longer than I thought, but only because I made the silly mistake of swapping d with n.
 ```
 (define (tan-cf x k)
@@ -1077,3 +1077,25 @@ Here it is working for 0, $\frac{\pi}{6}$, $\frac{\pi}{4}$, and $\pi$:
 
 ;Value: -2.6554829755074223e-6
 ```
+
+## Exercise 1.40
+```
+(define (cubic a b c)
+  (lambda (x) (+ (* x x x) (* a (square x)) (* b x) c)))
+```
+
+To test that it works, I used 
+$$ x^{3} + 3x^{2} - 6x -18 $$
+
+Which can be factored to
+
+$$(x + 3)(x^{2} - 6)$$
+
+So $\sqrt{6} \approx 2.449$ is a solution.
+
+```
+1 ]=> (newtons-method (cubic 3 (- 6) (- 18)) 1)
+
+;Value: 2.449489742783251
+```
+
