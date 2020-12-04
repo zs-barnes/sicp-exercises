@@ -1155,3 +1155,23 @@ The problem is in (compose f f). I'm using the previous function to nest, but be
 
 ;Value: 390625
 ```
+## Exercise 1.44
+The question didn't give any example functions to test these on, so I just used square and made sure I got similiar results if I explicitly nested the smoothing function.
+```
+(define dx 0.00001)
+
+(define (smooth f)
+  (lambda (x) (/ (+ (f (- x dx)) (f x) (f (+ x dx))) 3)))
+  
+(define (n-fold-smooth f n)
+  ((repeated smooth n) f))
+```
+```
+1 ]=> ((smooth (smooth (smooth square))) 4)
+
+;Value: 16.000000000199996
+
+1 ]=> ((n-fold-smooth square 3) 4)
+
+;Value: 16.000000000199996
+```

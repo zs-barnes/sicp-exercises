@@ -198,3 +198,16 @@
 
 (define (repeated f n)
  (lambda (x) ((compose f (compose f f)) x) ))
+
+(define dx 0.00001)
+
+(define (smooth f)
+  (lambda (x) (/ (+ (f (- x dx)) (f x) (f (+ x dx))) 3)))
+  
+(define (n-fold-smooth f n)
+  ((repeated smooth n) f))
+
+((smooth (smooth square)) 4)
+((smooth (smooth (smooth square)) 4))
+
+((n-fold-smooth square 3) 4)
