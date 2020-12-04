@@ -1122,3 +1122,36 @@ The first (double double) adds 4 to argument given, but the third double squares
 
 ;Value: 49
 ```
+
+## Exercise 1.43
+This one was trickier than I initially thought. My first try looked like this:
+```
+(define (repeated f n)
+  (define (repeated-iter f i)
+    (if (= i n)
+      f
+      (repeated-iter (compose f f) (+ i 1))))
+  (repeated-iter f 1))
+```
+This worked for n = 2, but for n = 3 it got the wrong answer:
+```
+1 ]=> ((repeated square 3) 5)
+
+;Value: 152587890625
+```
+It should be $5^{8} = 390,625$; instead it was skipping to $5^{16}$. 
+
+The problem is in (compose f f). I'm using the previous function to nest, but because of the recursion, the previous function is a composed function, not the original! I needed to be clear about which function was being composed on the outside to fix it.
+```
+(define (repeated orig-func n)
+  (define (repeated-iter nested-func i)
+    (if (= i n)
+      nested-func
+      (repeated-iter (compose orig-func nested-func) (+ i 1))))
+  (repeated-iter orig-func 1))
+```
+```
+1 ]=> ((repeated square 3) 5)
+
+;Value: 390625
+```

@@ -155,4 +155,46 @@
 (define (compose f g)
   (lambda (x) (f (g x))))
 
-((compose square inc) 6)
+
+
+((compose square inc) 5)
+
+(define (repeated orig-func n)
+  (define (repeated-iter nested-func i)
+    (if (= i n)
+      nested-func
+      (repeated-iter (compose orig-func nested-func) (+ i 1))))
+  (repeated-iter orig-func 1))
+
+(define (repeated f n)
+  (define (repeated-iter f i)
+    (if (= i n)
+      f
+      (repeated-iter (compose f f) (+ i 1))))
+  (repeated-iter f 1))
+
+(define (repeated f n)
+  (if (= n 1)
+      f
+    (repeated (compose f f) (- n 1))
+  )
+)
+
+((repeated square 3) 5)
+((repeated square 2) 5)
+
+(square 5)
+(square (square 5))
+(square (square (square 5)))
+
+(define (repeated f n)
+(cond ((= n 1) (lambda (x) (f x)))
+      ((= n 2) (lambda (x) (f(f x))))
+      ((= n 3) (lambda (x) (f(f(f x)))))  
+)
+)
+
+((compose square (compose square square)) 5)
+
+(define (repeated f n)
+ (lambda (x) ((compose f (compose f f)) x) ))
