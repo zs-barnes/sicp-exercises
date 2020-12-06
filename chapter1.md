@@ -1177,7 +1177,7 @@ The question didn't give any example functions to test these on, so I just used 
 ```
 
 ## Exercise 1.45
-Myyyyy goodness this one took a while to figure out but boy was it satisfying. The instructions say to do some "experiments". I thought I would find the pattern pretty quickly but I went on a bunch of tangents, until I simplified and saw the pattern, but I had to go out further than I thought. Here is a record of my experiments, see if you can spot the pattern (the comments above each expression are the number of times we average damped, and if that number worked or not): 
+Myyyyy goodness this one took a while to figure out but it was sooo satisfying. The instructions say to do some "experiments". I thought I would find the pattern pretty quickly but I went on a bunch of tangents, until I simplified and saw the pattern, but I had to go out further than I thought. Here is a record of my experiments, see if you can spot the pattern (the comments above each expression are the number of times we average damped, and if that number worked or not): 
 
 ```
 ; 1, 2, 3
@@ -1225,7 +1225,7 @@ Myyyyy goodness this one took a while to figure out but boy was it satisfying. T
 ; 5
 (nth-root (expt 2 32) 32)
 ```
-Alright, the pattern is that every time we hit an exponential of 2 (2, 4, 8, 16, 32), we increase the number of average-damping by 1. The reason why I didn't see this sooner was that I was intrigued that average damping using 1 worked for so many of the examples. I got hung up on examples like (nth-root (expt 2 13) 13), where 1 or 2 didn't work, but 3 did. 
+Alright, the pattern is that every time we hit a power of 2 (2, 4, 8, 16, 32), we increase the number of average-damping by 1. The reason why I didn't see this sooner was that I was distracted by the fact that average damping using 1 worked well for so many of the examples. I got hung up on examples like (nth-root (expt 2 13) 13), where 1 or 2 didn't work, but 3 did. 
 
 In the end, I thought about a way to implement this where I would only increase the number of average damps as the value of the root increased. But geez I had to go out to a 16th root to finally see the pattern. 
 
@@ -1244,4 +1244,37 @@ Working with a 32nd root:
 1 ]=> (nth-root (expt 2 32) 32)
 
 ;Value: 2.000000000000006
+```
+
+## Exercise 1.46
+This exercise was a little vauge, in that I didn't know if the two procedures of iterative-improve should take one or two arguments. I ended up using two arguments for its good-enough? procedure and one for its improve-guess procedure. I wrote fixed-point in terms of iterative-improve and using fixed point for sqrt. I wasn't sure how to write sqrt in terms of iterative-improve because the way sqrt is defined in section 1.1.7, it uses two arguments for the improve procedure, but for fixed point, this procedure only needs one arguments. 
+
+```
+(define (iterative-improve improve-guess good-enough?)
+  (define (try guess)
+    (let ((next (improve-guess guess)))
+      (if (good-enough? guess next)
+          next
+          (try next))))
+    (lambda (x) (try x)))
+
+(define tolerance 0.00001)
+(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2)) tolerance))
+  ((iterative-improve f close-enough?) first-guess))
+
+(define (sqrt x)
+  (fixed-point (lambda (y) (average y (/ x y)))
+               1.0))
+```
+Testing to make sure these same functions work as expected:
+```
+1 ]=> (fixed-point cos 1.0)
+
+;Value: .7390822985224023
+
+1 ]=> (sqrt 4)
+
+;Value: 2.000000000000002
 ```
