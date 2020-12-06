@@ -1175,3 +1175,73 @@ The question didn't give any example functions to test these on, so I just used 
 
 ;Value: 16.000000000199996
 ```
+
+## Exercise 1.45
+Myyyyy goodness this one took a while to figure out but boy was it satisfying. The instructions say to do some "experiments". I thought I would find the pattern pretty quickly but I went on a bunch of tangents, until I simplified and saw the pattern, but I had to go out further than I thought. Here is a record of my experiments, see if you can spot the pattern (the comments above each expression are the number of times we average damped, and if that number worked or not): 
+
+```
+; 1, 2, 3
+(nth-root 8 3)
+; 2, 3, not 1
+(nth-root 16 4)
+; 2, 3, not 1
+(nth-root 32 5)
+; 1, 2, 3 
+(nth-root 64 6)
+; 1, 2, 3 
+(nth-root (expt 2 7) 7)
+; 1, 3, not 2
+(nth-root (expt 2 8) 8)
+; 1, 3, not 2
+(nth-root (expt 2 9) 9)
+; 1, 3, not 2  
+(nth-root (expt 2 10) 10)
+; 1, 3, not 2 
+(nth-root (expt 2 11) 11)
+; 1, 2, 3
+(nth-root (expt 2 12) 12)
+; 3, not 1 or 2
+(nth-root (expt 2 13) 13)
+; 1, 3, not 2 
+(nth-root (expt 2 14) 14)
+; 1, 2, 3
+(nth-root (expt 2 15) 15)
+; 1, 2, 4 not 3
+(nth-root (expt 2 16) 16)
+; 1, 4 not 2, 3
+(nth-root (expt 2 17) 17)
+; 1, 2, 4 not 3
+(nth-root (expt 2 18) 18)
+; 1, 2, 4 not 3
+(nth-root (expt 2 19) 19)
+; 1, 2, 4 not 3
+(nth-root (expt 2 20) 20)
+; 1, 2, 4 not 3
+(nth-root (expt 2 21) 21)
+; 1, 2, 4 not 3
+(nth-root (expt 2 22) 22)
+; 4
+(nth-root (expt 2 31) 31)
+; 5
+(nth-root (expt 2 32) 32)
+```
+Alright, the pattern is that every time we hit an exponential of 2 (2, 4, 8, 16, 32), we increase the number of average-damping by 1. The reason why I didn't see this sooner was that I was intrigued that average damping using 1 worked for so many of the examples. I got hung up on examples like (nth-root (expt 2 13) 13), where 1 or 2 didn't work, but 3 did. 
+
+In the end, I thought about a way to implement this where I would only increase the number of average damps as the value of the root increased. But geez I had to go out to a 16th root to finally see the pattern. 
+
+For the actual implementation, I check if the root is less that a power of 2. For example, with a cube root, 3 is less than $2^{2} = 4$, so we compute the fixed point using 2 - 1 = 1 average damp. With a 7th root, we first we check if it is less than $2^{2} = 4$, and since it is not, we then check if it is less than $2^{3} = 8$, and since it is less now, we compute the fixed point using 3 - 1 = 2 average damps.
+```
+(define (nth-root x n)
+  (define (nth-root-iter x n pow-two)
+    (if (< n (expt 2 pow-two)) 
+        (fixed-point ((repeated average-damp (- pow-two 1))
+                      (lambda (y) (/ x (expt y (- n 1))))) 1.0)
+        (nth-root-iter x n (+ pow-two 1))))
+  (nth-root-iter x n 2))
+```
+Working with a 32nd root:
+```
+1 ]=> (nth-root (expt 2 32) 32)
+
+;Value: 2.000000000000006
+```

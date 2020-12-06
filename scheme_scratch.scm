@@ -203,7 +203,7 @@
 
 (define (smooth f)
   (lambda (x) (/ (+ (f (- x dx)) (f x) (f (+ x dx))) 3)))
-  
+
 (define (n-fold-smooth f n)
   ((repeated smooth n) f))
 
@@ -211,3 +211,99 @@
 ((smooth (smooth (smooth square)) 4))
 
 ((n-fold-smooth square 3) 4)
+
+(define (average-damp f)
+  (lambda (x) (average x (f x))))
+
+(define (sqrt x)
+  (fixed-point (average-damp (lambda (y) (/ x y)))
+               1.0))
+
+
+
+(define (nth-root x n)
+  (fixed-point ((repeated average-damp avg-count)(lambda (y) (/ x (expt y (- n 1))))) 1.0)
+)
+
+(define (nth-root x n)
+  (define (compute-fixed-point avg-count)
+    (fixed-point ((repeated average-damp avg-count)(lambda (y) (/ x (expt y (- n 1))))) 1.0))
+  (define (nth-root-iter x n pow-two)
+    (if (< n (expt 2 pow-two)) 
+        (compute-fixed-point (- pow-two 1))
+        (nth-root-iter x n (+ pow-two 1))) 
+  )
+  (nth-root-iter x n 2)
+)
+
+(define (nth-root x n)
+  (define (nth-root-iter x n pow-two)
+    (if (< n (expt 2 pow-two)) 
+        (fixed-point ((repeated average-damp (- pow-two 1))
+                      (lambda (y) (/ x (expt y (- n 1))))) 1.0)
+        (nth-root-iter x n (+ pow-two 1))))
+  (nth-root-iter x n 2))
+
+
+; 1, 2, 3
+(nth-root 8 3)
+; 2, 3, not 1
+(nth-root 16 4)
+; 2, 3, not 1
+(nth-root 32 5)
+; 1, 2, 3 
+(nth-root 64 6)
+; 1, 2, 3 
+(nth-root (expt 2 7) 7)
+; 1, 3, not 2
+(nth-root (expt 2 8) 8)
+; 1, 3, not 2
+(nth-root (expt 2 9) 9)
+; 1, 3, not 2  
+(nth-root (expt 2 10) 10)
+; 1, 3, not 2 
+(nth-root (expt 2 11) 11)
+; 1, 2, 3
+(nth-root (expt 2 12) 12)
+; 3, not 1 or 2
+(nth-root (expt 2 13) 13)
+; 1, 3, not 2 
+(nth-root (expt 2 14) 14)
+; 1, 2, 3
+(nth-root (expt 2 15) 15)
+; 1, 2, 4 not 3
+(nth-root (expt 2 16) 16)
+; 1, 4 not 2, 3
+(nth-root (expt 2 17) 17)
+; 1, 2, 4 not 3
+(nth-root (expt 2 18) 18)
+; 1, 2, 4 not 3
+(nth-root (expt 2 19) 19)
+; 1, 2, 4 not 3
+(nth-root (expt 2 20) 20)
+; 1, 2, 4 not 3
+(nth-root (expt 2 21) 21)
+; 1, 2, 4 not 3
+(nth-root (expt 2 22) 22)
+; 4
+(nth-root (expt 2 31) 31)
+; 5
+(nth-root (expt 2 32) 32)
+
+4:2
+8:3
+16:4
+32:5
+
+
+
+
+
+
+
+
+
+(define (iter-improve improve-guess good-guess)
+(if ))
+; We want to be able to do:
+((iter-improve fixed-point good-enough?) 1.0)
