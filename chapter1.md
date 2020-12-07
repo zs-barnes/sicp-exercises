@@ -1,11 +1,3 @@
-To install mit-scheme, I used:
-```
-brew install mit-scheme
-```
-Then to run the scheme repl, run:
-```
-scheme
-```
 ## Exercise 1.1
 
 
