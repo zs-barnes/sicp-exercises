@@ -6,7 +6,6 @@ Then to run the scheme repl, run:
 ```
 scheme
 ```
-Easy!
 ## Exercise 1.1
 
 
@@ -87,7 +86,7 @@ Evaluates to -37/150
 ## Exercise 1.4
 
 ```
-(define(a-plus-abs-b a b)
+(define (a-plus-abs-b a b)
    ((if (> b 0) + -) a b))
 ```
 The function name gives it away: Add to a the absolute value of b. If b is positive add it to a, but if negative, cancel the negative by subtracting. 
@@ -161,7 +160,7 @@ This was tricky but satisfying. Coming from a procedural background, I was stuck
 
 I then pass along guess in the recursive call in the prev-guess argument. So now, each call of the sqrt-iter takes in the improved guess and the prev-guess. 
 
-For the good-enough? function, we are now checking that the change between the previous and improved guess is greater then a small fraction of the guess. I probably could have kept used one expression, but I decided to create a fraction function just for practice. I used 1/100000, which seemed to work pretty well. 
+For the good-enough? function, we are now checking that the change between the previous and improved guess is greater then a small fraction of the guess. I probably could have used one expression, but I decided to create a fraction function just for practice. I used 1/100000, which seemed to work pretty well. 
 
 Testing it out:
 ```
@@ -231,7 +230,7 @@ Based on the increasing length of our deferred operations, and a clear stopping 
 (+ 0 9)
 9
 ```
-Because we only keep track of two state variables, and don't perform deferred operations, this a linear iterative process.
+Because we only keep track of two state variables, and don't perform deferred operations, this an iterative process.
 
 ## Exercise 1.10
 ```
@@ -267,7 +266,7 @@ Recursive version basically wrote itself, but takes forever to even compute n = 
 )
 ```
 
-Iterative version took an hour to figure out, mainly just writing on paper what the calculations were. There are only 3 state variables needed, and I first check if n < 3, and if not, then I use the func2_iter() with the starting inialization at 2, 1, 0. I then compute similarly to the recursive function to update a, then swap b=a, and c=b. For n to be the correct number of iterations, we have to start at n - 2 since we check if less than 3 at the beginning, effectively checking for the first two iterations.
+Iterative version took a while to figure out, mainly just writing on paper what the calculations were. There are only 3 state variables needed, and I first check if n < 3, and if not, then I use the func2_iter() with the starting inialization at 2, 1, 0. I then compute similarly to the recursive function to update a, then swap b=a, and c=b. For n to be the correct number of iterations, we have to start at n - 2 since we check if n is less than 3 at the beginning, effectively checking for the first two iterations.
 
 Now, n = 100 is instantaneous. 
 
@@ -312,7 +311,7 @@ pascal(row above, one column left) + pascal(row above, same column)
 Coming back to this one later.
 
 ## Exercise 1.14
-My attempt to start drawing the calls for count-change is pictured. They kind of gave it away in the chapter that there is an exponential number of calls to the cc function. Something like O(a^k) for time complexity. There are two recursive calls, and to get to the bottom of the first branch we need to reach the bottom of the kinds-of-coins, which is k. The second branch for each call needs to reach the bottom of the amount, a. Still wrapping my mind about that one.
+My attempt to start drawing the calls for count-change is pictured. They kind of gave it away in the chapter that there is an exponential number of calls to the cc function. Something like O(a^k) for time complexity. There are two recursive calls, and to get to the bottom of the first branch we need to reach the bottom of the kinds-of-coins, which is k. The second branch for each call needs to reach the bottom of the amount, a. Still wrapping my mind around that one.
 
  The space complexity (the number of levels in the tree) is O(n). This is because the number of levels (the height) in a binary tree is related to the number of nodes in a tree. The relationship between the number of nodes and the height of a binary tree is (at most) num_nodes = 2^(h + 1) - 1, where h is the height. 
 With big O this is num_nodes = 2^h. Since num_nodes is bounded by 2^n, we can see that 2^n = 2^h, so the height is the n, the size of the input, or in this case, the number of cents we want change for.
@@ -336,7 +335,7 @@ b. For complexity, we essentially are counting how many times we need to divide 
 
 ## Exercise 1.16
 
-I stuggled with a couple different approaches, and ended up consulting Knuth's Art of Programming Vol 2 section 4.6.3 for the algorithm, which I went through to make sure I understood, then implemented it in scheme. From the problem description, I was confused about what "define the state transformation in such a way that the product a * bn is unchanged from state to state", but now I understand that a * bn is always equal to the final answer, but you are changing the values of a, b, and n with each iteration. 
+I stuggled with a couple different approaches, and ended up consulting Knuth's Art of Programming Vol 2 section 4.6.3 for the algorithm, which I went through to make sure I understood, then implemented in Scheme. From the problem description, I was confused about what "define the state transformation in such a way that the product a * bn is unchanged from state to state", but now I understand that a * bn is always equal to the final answer, but you are changing the values of a, b, and n with each iteration. 
 
 Here's an example for 2^9. At each iteration the product a * b^n is always 512:
 
@@ -489,7 +488,7 @@ This is how I interpreted the instructions for the search-for-primes procedure:
 x is the start and y is the end. There doesn't seem to be 
 a difference is timing for numbers at 1000 or 1,000,000, but there is at 1 billion and 1 trillion. I'm guessing that due to the improvements in hardware since this book was written, there is now hardly a difference for comparsions between search-for-primes at 10 and 1000.
 
-Here is the output for the three smallest primes larger than 1000.
+Output for the three smallest primes larger than 1000.
 
 ```
 (search-for-primes 1000 1100)
@@ -505,8 +504,7 @@ Here is the output for the three smallest primes larger than 1000.
 1017
 1019 *** 0.
 ```
-
-Here is the output for the three smallest primes larger than 1,000,000:
+Output for the three smallest primes larger than 1,000,000:
 ```
 (search-for-primes 1000000 1000100)
 1000000
@@ -574,7 +572,7 @@ Now its easier to compare the difference. This is close to sqrt(10) times longer
 So it looks like the machine runs in time proportional to the number of steps required for the computation.
 
 ## Exercise 1.23
-Here are the updates to the smallest-divisor procedure:
+Updates to the smallest-divisor procedure:
 ```
 (define (next x)
   (if (= x 2) 3
@@ -648,15 +646,12 @@ Now the test is 1,400 times faster! 1 trillion also is around 0.01, so it is har
 
 
 ## Exercise 1.25
-This version of expmod is much slower because it first has to compute the base^exp, which can be extremely large. The orginial expmod procedure never explicitly computes this number, instead it uses successive squaring that ensures we decrease the exponential recusrivusly before using it with a base. 
+This version of expmod is much slower because it first has to compute base^exp, which can be extremely large. The orginial expmod procedure never explicitly computes this number, instead it uses successive squaring that ensures we decrease the exponential recursively before using it with a base. 
 
 ## Exercise 1.26
 By not calling square, we instead are making two recursive calls to expmod, making this a tree recursive process. Because Scheme is applicative order, now it must evalute both calls to expmod before making each recursive call. 
 
 By making two recursive calls, we are cancelling out the benefit we recieved with succesive squaring, creating an O(n) runtime.
-
-Instead of T(n) = 1 + T(n/2), which evaluates to O(log n), where we cut amount of work in half with each even call, 
-we now instead have T(n) = 1 + T(n/2) + T(n/2), which evaluates to O(n)
 
 ## Exercise 1.27
 Here is my implementation of a test to check for a carmichael number:
@@ -671,7 +666,7 @@ Here is my implementation of a test to check for a carmichael number:
   )
 )
 ```
-Starting at 2, I check if all the positive integers below n are satisfy a^n mod n = a. If we reach n, and if the input number if not prime, then we have found a carmichael number. 561 is an example:
+Starting at 2, I check if all the positive integers below n satisfy a^n mod n = a. If we reach n, and if the input number is not prime, then we have found a carmichael number. 561 is an example:
 ```
 (smallest-divisor 561)
 ;Value: 3
@@ -807,7 +802,7 @@ Here is an example test for the accumulate function:
 
 ;Value: 3025
 ```
-Here is the iterative accumulate function:
+Iterative accumulate function:
 ```
 (define (accumulate combiner null-value term a next b)
   (define (iter a result)
@@ -818,7 +813,7 @@ Here is the iterative accumulate function:
 ```
 
 ## Exercise 1.33 
-Here is a recursive filtered-accumulate. The only difference from the accumulate is that there is a condional check at each step whether the condition is satisfied.
+A recursive version of filtered-accumulate. The only difference from the accumulate is that there is a condional check at each step whether the condition is satisfied.
 ```
 (define (filtered-accumulate combiner null-value term a next b filter)
   (cond ((> a b) null-value)
@@ -826,7 +821,7 @@ Here is a recursive filtered-accumulate. The only difference from the accumulate
   (filtered-accumulate combiner null-value term (next a) next b filter)))
   (else (filtered-accumulate combiner null-value term (next a) next b filter))))
 ```
-a) Here is the result  of the sum of squares of the prime numbers in a given range:
+a) Result of the sum of squares of the prime numbers in a given range:
 ```
 1 ]=> (filtered-accumulate + 0 square 2 inc 9 prime?)
 
@@ -855,7 +850,7 @@ Here is an example using the function. I'm using identity and inc, which we've d
 ;Value: 105
 ```
 ## Exercise 1.34
-When running (f f), we recieve the error "the object 2 is not applicable" This is because the second argument
+When running (f f), we recieve the error "the object 2 is not applicable". This is because the second argument
 as itself evaluates to 2, which is then applied as an operater in the final f, but because 2 is a primitive, we cannot use it as a function.
 
 ## Exercise 1.35
@@ -868,7 +863,7 @@ $$ = 1 - \frac{1}{2} + \frac{\sqrt{5}}{2}$$
 $$ = 1 + \frac{-1 + \sqrt{5}}{2}$$
 $$ = \frac{1 + \sqrt{5}}{2}$$
 
-Here is the computation of $\phi$ with fixed-point, and a starting guess of 1:
+Computation of $\phi$ with fixed-point, and a starting guess of 1:
 ```
 1 ]=> (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0))
 
@@ -876,7 +871,7 @@ Here is the computation of $\phi$ with fixed-point, and a starting guess of 1:
 ```
 
 ## Exercise 1.36
-Here is the modified fixed-point with newline and display:
+Modified fixed-point with newline and display:
 ```
 (define tolerance 0.00001)
 (define (fixed-point f first-guess)
@@ -951,7 +946,7 @@ To make an average damping version of this function, we take the average of the 
 ```
 
 ## Exercise  1.37
-Here is a recursive implementation of cont-frac:
+Recursive implementation of cont-frac:
 ```
 (define (cont-frac n d k)
   (define (cont-frac-iter n d k i)
@@ -971,7 +966,7 @@ K must be 12 to approxmiate the golden ration to 4 decimal places:
 ;Value: 1.6180555555555554
 ```
 
-Here is the iterative implementation of cont-frac (sorry for the same naming..). The results are the same, with k=12 being enough for 4 decimal places.
+Iterative implementation of cont-frac. The results are the same, with k=12 being enough for 4 decimal places.
 ```
 (define (cont-frac n d k)
   (define (cont-frac-iter n d k result)
@@ -983,7 +978,7 @@ Here is the iterative implementation of cont-frac (sorry for the same naming..).
 This was interesting because to me it made more sense for the accumulations to start from the end (the "bottom" of the continued fraction), and build back up, compared to the recursive version, which starts from the top, and accumlates down the continued fraction.
 
 ## Exercise 1.38
-The fun of this exercise was figuring out how to express $D_{i}$ as a function of i. The solution I came up is a little strange, but I like its jankiness. 
+The fun of this exercise was figuring out how to express $D_{i}$ as a function of i. The solution I came up with is a little wonky. 
 
 ```
 (define (d-func i)
@@ -1177,7 +1172,7 @@ The question didn't give any example functions to test these on, so I just used 
 ```
 
 ## Exercise 1.45
-Myyyyy goodness this one took a while to figure out but it was sooo satisfying. The instructions say to do some "experiments". I thought I would find the pattern pretty quickly but I went on a bunch of tangents, until I simplified and saw the pattern, but I had to go out further than I thought. Here is a record of my experiments, see if you can spot the pattern (the comments above each expression are the number of times we average damped, and if that number worked or not): 
+Myyyyy goodness this one took a while to figure out but it was very satisfying. The instructions say to do some "experiments". I thought I would find the pattern pretty quickly but I went on a bunch of tangents, until I simplified and saw the pattern, but I had to go out further than I thought. Here is a record of my experiments, see if you can spot the pattern (the comments above each expression are the number of times we average damped, and if that number worked or not): 
 
 ```
 ; 1, 2, 3
