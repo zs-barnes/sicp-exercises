@@ -244,7 +244,7 @@ For function h, for inputs [1, 2, 3, 4, 5] -> [2, 4, 16, 65536, then a number th
 
 This is the tower function, where n corresponds to how many times we exponentiate 2. The recursive definition for this is:
 
-![](tetration.png)
+![](img/tetration.png)
 
 ## Exercise 1.11
 
@@ -309,7 +309,7 @@ My attempt to start drawing the calls for count-change is pictured. They kind of
 With big O this is num_nodes = 2^h. Since num_nodes is bounded by 2^n, we can see that 2^n = 2^h, so the height is the n, the size of the input, or in this case, the number of cents we want change for.
 
 
-![](count_change_tree.jpg)
+![](img/count_change_tree.jpg)
 
 ## Exercise 1.15
 a. Based on the substitution model, the procedure p will be applied 5 times:

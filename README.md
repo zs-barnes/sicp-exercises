@@ -1,5 +1,5 @@
 
-![textbookimage](sicp.jpg)
+![textbookimage](img/sicp.jpg)
 
 This is my attempt at the exercises in the textbook "Structure and Interpretation of Computer Programs". 
 
