@@ -654,7 +654,7 @@ By not calling square, we instead are making two recursive calls to expmod, maki
 By making two recursive calls, we are cancelling out the benefit we recieved with succesive squaring, creating an O(n) runtime.
 
 ## Exercise 1.27
-Here is my implementation of a test to check for a carmichael number:
+Implementation of a test to check for a carmichael number:
 ```
 (define (carmichael n)
   (carmichael-iter n 2))
@@ -788,7 +788,7 @@ This was straightforward, just had to modify the iterative sum from exercise 1.3
         (iter (next a) (* result (term a)))))
   (iter a 1))
 ```
-Here is a recursive accumulate fuction. The combiner for product or sum is * or +, and for null-value 1 or 0 respectively.
+Recursive accumulate fuction. The combiner for product or sum is * or +, and for null-value 1 or 0 respectively.
 ```
 (define (accumulate combiner null-value term a next b)
   (if (> a b)
@@ -796,7 +796,7 @@ Here is a recursive accumulate fuction. The combiner for product or sum is * or 
     (combiner (term a)
               (accumulate combiner null-value term (next a) next b))))
 ```
-Here is an example test for the accumulate function:
+Example test for the accumulate function:
 ```
 1 ]=> (accumulate + 0 cube 1 inc 10)
 
@@ -1030,7 +1030,7 @@ I wrote a loop to make sure its doing what I think:
 10done
 ;Unspecified return value
 ```
-Finally, here is the approximation of $e$ using cont-frac:
+Finally, the approximation of $e$ using cont-frac:
 ```
 1 ]=> (+ (cont-frac (lambda (i) 1) d-func 10) 2.0)
 

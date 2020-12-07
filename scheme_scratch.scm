@@ -295,14 +295,6 @@
 16:4
 32:5
 
-
-
-
-
-
-
-
-
 (define (iter-improve improve-guess good-guess)
 (if ))
 ; We want to be able to do:
@@ -325,3 +317,21 @@
 (define (sqrt x)
   (fixed-point (lambda (y) (average y (/ x y)))
                1.0))
+
+ (define (product term a next b)
+  (if (> a b)
+      1
+      (* (term a)
+         (product term (next a) next b))))
+
+(define (pi n)
+  (define (numerator-term x)
+    (if (= x 2)
+    x
+    (* x x)))
+  (define (next x)
+    (+ x 2))
+  (define (denominator-term x)
+  (* x x))
+
+)
