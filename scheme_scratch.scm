@@ -335,3 +335,31 @@
   (* x x))
 
 )
+
+(define (make-rat n d)
+  (let ((g (gcd n d)))
+    (cons (/ n g) (/ d g))))
+
+(define (make-rat n d)
+  (let ((g (abs(gcd n d))))
+    (cond ((or (and (> n 0) (< d 0)) (and (< n 0) (< d 0))) 
+            (cons (/ (* n -1) g) (/ (* d -1) g)))
+          (else (cons (/ n g) (/ d g))))))
+
+(define (make-rat n d)
+  (let ((g (abs(gcd n d))))
+    (if (or (and (> n 0) (< d 0)) (and (< n 0) (< d 0))) 
+        (cons (/ (* n -1) g) (/ (* d -1) g))
+        (cons (/ n g) (/ d g)))))
+
+
+
+(define (make-rat n d)
+  (let ((g (abs(gcd n d))))
+    (cond ((or ((and (> n 0) (< d 0)) (and (< n 0) (< d 0))) (cons (/ (* n -1) g) (/ (* d -1) g)))
+          (else (cons (/ n g) (/ d g))))))
+
+(make-rat 4 -8)
+(make-rat -4 -8)
+
+          ((and (> n 0) (< d 0)) (cons (/ (* n -1) g) (/ (* d -1) g)))
