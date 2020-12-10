@@ -332,7 +332,7 @@ I stuggled with a couple different approaches, and ended up consulting Knuth's A
 Here's an example for 2^9. At each iteration the product a * b^n is always 512:
 
 
-| a      | b^n     | 
+| a      | b^n     |
 | :------------- | :----------: |
 | 1 | 2^9   |
 | 2 | 16^2 |
@@ -387,19 +387,19 @@ Looking into Knuth's AOP vol 2 section 4.6.3, (page 443) he also notes the same 
 ## Exercise 1.19
 Once I figured out what the question was asking, this turned out just to be some algebra. Since it doesn't matter whether we solve with a or b, I solved with b as it has less terms. For the equation b = bp + aq, we plug in for b the same equation, and we plug in a as a = bq + aq + ap. Then we factor to get a and b by itself, to follow the form of b = bp + aq, and whatever we have mutliplied by b and a is our p' and q'
 
-b = bp + aq 
+$ b = bp + aq $ 
 
-T(b) = (bp + aq)p + (bq + aq + ap)q
+$ T(b) = (bp + aq)p + (bq + aq +ap)q $
 
-= bp^2 + apq + bq^2 + aq^2 + apq
+$ = bp^{2} + apq + bq^2 + aq^{2} + apq$
 
-= bp^2 + bq^2 + apq +aq^2 + apq
+$= bp^{2} + bq^{2} + apq + aq^{2} + apq$
 
-= b(p^2 + q^2) + a(pq + q^2 + pq)
+$= b(p^{2} + q^{2}) + a(pq + q^{2} + pq)$
 
-= b(p^2 + q^2) + a(2pq + q^2)
+$= b(p^{2} + q^{2}) + a(2pq + a^{2})$
 
-So p' = p^2 + q^2, and q' = 2pq + q^2.
+So $p'= p^{2} + q^{2}$ and $q' = 2pq + q^{2}$
 
  In Scheme:
 
@@ -1265,3 +1265,4 @@ Testing to make sure these same functions work as expected:
 
 ;Value: 2.000000000000002
 ```
+
