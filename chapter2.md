@@ -37,18 +37,97 @@ This was a fun one.
 (define (y-point p) (cdr p))
 (define (average x y) (/ (+ x y) 2))
 (define (midpoint-segment s) 
-  (let ((x1 (car (start-segment s)))
-        (x2 (car (end-segment s)))
-        (y1 (cdr (start-segment s)))
-        (y2 (cdr (end-segment s))))
+  (let ((x1 (x-point (start-segment s)))
+        (x2 (x-point (end-segment s)))
+        (y1 (y-point (start-segment s)))
+        (y2 (y-point (end-segment s))))
         (make-point (average x1 x2) (average y1 y2))))
 ```
 Test:
 ```
-(define (point-1) (make-point -1 2))
-(define (point-2) (make-point 3 -6))
-(define (segment) (make-segment (point-1) (point-2)))
+(define point-1 (make-point -1 2))
+(define point-2 (make-point 3 -6))
+(define segment (make-segment point-1 point-2))
 1 ]=> (midpoint-segment (segment))
 
 ;Value: (1 . -2)
+```
+
+## Exercise 2.3
+I define a rectangle using just two segments:
+```
+(define (make-rect s1 s2) (cons s1 s2))
+(define (first-rect-seg rect) (car rect))
+(define (second-rect-seg rect) (cdr rect))
+```
+To calculate the perimeter and area, I first had to create `seg-length`, which implements the distance formula. 
+```
+(define (seg-length s)
+  (let ((x1 (x-point (start-segment s)))
+        (x2 (x-point (end-segment s)))
+        (y1 (y-point (start-segment s)))
+        (y2 (y-point (end-segment s))))
+    (sqrt (+ (square (- x2 x1))
+             (square (- y2 y1))))))
+
+(define (perimeter rect)
+  (let ((s1 (first-rect-seg rect))
+        (s2 (second-rect-seg rect)))
+        (+ (* 2 (seg-length s1)) (* 2 (seg-length s2)))))
+
+(define (area rect)
+  (let ((s1 (first-rect-seg rect))
+        (s2 (second-rect-seg rect)))
+        (* (seg-length s1) (seg-length s2))))
+```
+
+Tests: 
+```
+(define point-1 (make-point 0 0))
+(define point-2 (make-point 0 3))
+(define seg-1 (make-segment point-1 point-2))
+
+(define point-1 (make-point 0 0))
+(define point-2 (make-point 4 0))
+(define seg-2 (make-segment point-1 point-2))
+
+(define my-rect (make-rect seg-1 seg-2))
+```
+```
+1 ]=> (perimeter my-rect)
+
+;Value: 14
+
+1 ]=> (area my-rect)
+
+;Value: 12
+```
+
+Here is a different underlying representation of a rectangle, which takes in four points: 
+```
+(define (make-rect p1 p2 p3 p4) 
+  (cons (cons p1 p2) (cons p2 p3)) (cons (cons p3 p4) (cons p4 p1)))
+
+(define (first-rect-seg rect) 
+  (make-segment (car (car rect)) (cdr (car rect))))
+
+(define (second-rect-seg rect) (cdr rect)
+  (make-segment (car (cdr rect)) (cdr (cdr rect))))
+```
+Now, without chaning our perimeter and area functions, we can test with a new rectangle:
+```
+(define point-1 (make-point 0 0))
+(define point-2 (make-point 0 4))
+(define point-3 (make-point 5 4))
+(define point-4 (make-point 5 0))
+(define my-rect (make-rect point-1 point-2 point-3 point-4))
+
+
+1 ]=> (perimeter my-rect)
+
+;Value: 18
+
+1 ]=> (area my-rect)
+
+;Value: 20
 ```
