@@ -131,3 +131,26 @@ Now, without chaning our perimeter and area functions, we can test with a new re
 
 ;Value: 20
 ```
+
+## Exercise 2.4
+Using the substition model, we can show this representation yields x for car:
+```
+(car (cons x y))
+((cons x y) (lambda (p q) p))
+((lambda (m) (m x y)) (lambda (p q) p))
+((lambda (p q) p) x y)
+x
+```
+cdr definition:
+```
+(define (cdr z)
+  (z (lambda (p q) q)))
+```
+Substition for cdr:
+```
+(cdr (cons x y))
+((cons x y) (lambda (p q) q))
+((lambda (m) (m x y)) (lambda (p q) q))
+((lambda (p q) q) x y)
+y
+```

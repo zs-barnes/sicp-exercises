@@ -446,3 +446,6 @@
 (area my-rect)
 
 (x-point (start-segment (first-rect-seg my-rect)))
+
+(define (cdr z)
+  (z (lambda (p q) q)))
