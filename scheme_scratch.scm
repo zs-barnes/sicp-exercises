@@ -449,3 +449,17 @@
 
 (define (cdr z)
   (z (lambda (p q) q)))
+
+(define (cons a b)
+(* (expt 2 a) (expt 3 b)))
+
+(define (car x)
+  (count-divisions 2 x))
+
+(define (cdr x)
+  (count-divisions 3 x))
+
+(define (count-divisions b x)
+(if (= (remainder x b) 0)
+    (+ 1 (count-divisions b (/ x b)))
+    0))

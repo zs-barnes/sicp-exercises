@@ -154,3 +154,36 @@ Substition for cdr:
 ((lambda (p q) q) x y)
 y
 ```
+
+## Exercise 2.5
+The insight here was that we can figure out a one item in a pair from an integer by dividing by the base of that item, and count how many times until we have a remainder of 0. So basically a log with a base of 2 or 3. For example, if we constructed $2^{3} \cdot 3^{2} = 72$, where a = 3 and b = 2, and we wanted a, we would divide 72 by 2 to get 36, then again to get 18, then again to get 9, which would give a remainder of 1. Since we divided by 2 three times to reach 9, that is our exponent, a.
+
+I've implemented this process in `count-divisions`. For `car` we use base 2, and for `cdr` we use base 3.
+
+```
+(define (cons a b)
+(* (expt 2 a) (expt 3 b)))
+
+(define (car x)
+  (count-divisions 2 x))
+
+(define (cdr x)
+  (count-divisions 3 x))
+
+(define (count-divisions b x)
+(if (= (remainder x b) 0)
+    (+ 1 (count-divisions b (/ x b)))
+    0))
+```
+Tests:
+```
+1 ]=> (car (cons 82 73))
+
+;Value: 82
+
+1 ]=> (cdr (cons 82 73))
+
+;Value: 73
+```
+
+## Exercise 2.6
