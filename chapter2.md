@@ -187,3 +187,42 @@ Tests:
 ```
 
 ## Exercise 2.6
+Derivation for `one` in Church numerals using the substitution model:
+```
+(add-1 zero)
+(lambda (f) (lambda (x) (f ((zero f) x))))
+(lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) x)) f) x))))
+(lambda (f) (lambda (x) (f ((lambda (x) x) x))))
+(lambda (f) (lambda (x) (f x)))
+
+(define one (lambda (f) (lambda (x) (f x))))
+```
+
+Now that we have `one` we can derive `two` similarly:
+```
+(add-1 two)
+(lambda (f) (lambda (x) (f ((one f) x))))
+(lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) (f x))) f) x))))
+(lambda (f) (lambda (x) (f ((lambda (x) (f x)) x))))
+(lambda (f) (lambda (x) (f (f x))))
+
+(define two (lambda (f) (lambda (x) (f (f x)))))
+```
+These match up with the definitions given in wikipedia:
+
+$$ 0 = \lambda f. \lambda x.x $$
+$$ 1 = \lambda f.\lambda x.f\ x $$
+$$ 2 = \lambda f.\lambda x.f\ (f\ x) $$
+
+The definition of add is beyond me..
+I implemented what wikipedia gave for an addition with Church numerals:
+```
+(define (+ m n)
+  (lambda (m) (lambda (n) (lambda (f) (lambda (x) (f (n (f x))))))))
+```
+It seemed to do its thing:
+```
+1 ]=> (+ one two)
+
+;Value: #[compound-procedure 14]
+```
