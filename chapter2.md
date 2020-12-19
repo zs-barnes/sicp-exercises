@@ -226,3 +226,47 @@ It seemed to do its thing:
 
 ;Value: #[compound-procedure 14]
 ```
+
+## Exercise 2.7
+```
+(define (lower-bound interval) (car interval))
+(define (upper-bound interval) (cdr interval))
+```
+
+## Exercise 2.8
+Subtraction is not commutative, so order matters here. 
+```
+(define (sub-interval x y)
+  (make-interval (- (lower-bound x) (lower-bound y)) 
+                 (- (upper-bound x) (upper-bound y))))
+```
+
+## Exercise 2.9
+This is a boring exercise. Actually this whole section is rather boring. Interval arithmetic, really?
+
+I'll show that width of the sum of two intervals is a function only of the widths of the intervals being added.
+
+Let $I_{1}$ and $I_{2}$ be intervals, which have upper and lower bound of $ (L_{1}, U_{1})$ and $(L_{2}, U_{2})$ respectively. 
+
+Then, their sum is:
+
+$I_{1} + I_{2} = [(L_{1} + L_{2}),(U_{1} + U_{2})]$
+
+ The width of the sum is then:
+
+ $W(I_{1} + I_{2}) = \dfrac{(U_{1} + U_{2}) - (L_{1} + L_{2})}{2}$
+
+
+
+Now we want to show that we can get the width of the sums by adding the widths of the intervals. 
+
+Let $W_{1} = \dfrac{U_{1} - L{1}}{2}$ , $W_{2} = \dfrac{U_{2} - L{2}}{2}$
+
+Then $W_{1} + W_{2} = \dfrac{U_{1} - L{1}}{2} + \dfrac{U_{2} - L{2}}{2} = \dfrac{(U_{1} - L_{1}) + (U_{2} - L_{2})}{2} $
+
+$= \dfrac{(U_{1} + U_{2}) + (- L_{1} - L_{2})}{2} = \dfrac{(U_{1} + U_{2}) - (L_{1} + L_{2})}{2} $ 
+
+Which is the width of summing the two intervals. 
+
+
+
