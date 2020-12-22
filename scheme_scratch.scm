@@ -504,3 +504,95 @@
         (p4 (- (upper-bound x) (upper-bound y))))
     (make-interval (min p1 p2 p3 p4)
                    (max p1 p2 p3 p4))))
+
+(define (div-interval x y)
+  (if (or (= (upper-bound y) 0) 
+          (= (lower-bound y) 0))
+      (error "Divide by Zero")
+      (mul-interval x 
+        (make-interval (/ 1.0 (upper-bound y))
+          (/ 1.0 (lower-bound y))))))
+
+(define (make-center-percent c p)
+  (make-interval (- c (* c p)) (+ c (* c p))))
+
+(define (make-center-width c w)
+  (make-interval (- c w) (+ c w)))
+(define (center i)
+  (/ (+ (lower-bound i) (upper-bound i)) 2))
+(define (width i)
+  (/ (- (upper-bound i) (lower-bound i)) 2))
+                               
+                  
+(make-center-percent 6.8 0.1)
+
+(define (percent i) 
+  (/ (width i) (center i)))
+
+(percent (make-center-width 6.8 0.68))
+
+(define (mul-interval x y)
+  (let ((p1 (* (lower-bound x) (lower-bound y)))
+        (p2 (* (lower-bound x) (upper-bound y)))
+        (p3 (* (upper-bound x) (lower-bound y)))
+        (p4 (* (upper-bound x) (upper-bound y))))
+    (make-interval (min p1 p2 p3 p4)
+                   (max p1 p2 p3 p4))))
+
+(define i1 (make-interval 6.12 7.48))
+(define i2 (make-interval 4.456 4.935))
+(define i1 (make-center-percent 6.8 0.1))
+(define i2 (make-center-percent 4.7 0.05))
+(percent (mul-interval i1 i2))
+
+(define (par1 r1 r2)
+  (div-interval (mul-interval r1 r2)
+                (add-interval r1 r2)))
+(define (par2 r1 r2)
+  (let ((one (make-interval 1 1))) 
+    (div-interval one
+                  (add-interval (div-interval one r1)
+                                (div-interval one r2)))))
+
+(par1 i1 i2)
+
+(define i1 (make-center-percent 100 0.0001))
+(define i2 (make-center-percent 50 0.001))
+
+(define i1 (make-interval 999 1001))
+
+(define (list-ref l n)
+  (if (= n 0)
+      (car l)
+      (list-ref (cdr l) (- n 1))))
+
+(define (last-pair items)
+  (if (null? (cdr items))
+      (car items)
+      (last-pair (cdr items))))
+
+(define (reverse items)
+  (if (null? (cdr items))
+      items
+      (cons (last-pair items) (reverse (car items)))))
+
+(define (length items)
+  (if (null? items)
+      0
+      (+ 1 (length (cdr items)))))
+
+(define (reverse items)
+  (if (null? items)
+      0
+      (cons (reverse (cdr items)) (car items))))
+
+(car (cdr (cdr (list 1 2 3 4))))
+
+(define (reverse items)
+  (define (reverse-iter items n)
+    (if (< n 0)
+        '()
+        (cons (list-ref items n) (reverse-iter items (- n 1)))))
+  (reverse-iter items (- (length items) 1)))
+
+(reverse (list 1 2 3 4))

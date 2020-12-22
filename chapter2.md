@@ -268,5 +268,100 @@ $= \dfrac{(U_{1} + U_{2}) + (- L_{1} - L_{2})}{2} = \dfrac{(U_{1} + U_{2}) - (L_
 
 Which is the width of summing the two intervals. 
 
+## Exercise 2.10
+```
+(define (div-interval x y)
+  (if (or (= (upper-bound y) 0) 
+          (= (lower-bound y) 0))
+      (error "Divide by Zero")
+      (mul-interval x 
+        (make-interval (/ 1.0 (upper-bound y))
+          (/ 1.0 (lower-bound y))))))
 
+1 ]=> (div-interval (make-interval 1 2) (make-interval 0 2))
+
+;Divide by Zero
+;To continue, call RESTART with an option number:
+; (RESTART 1) => Return to read-eval-print level 1
+```
+
+## Exercise 2.11
+Ben Bitdiddle: You are too cryptic for me.
+
+## Exercise 2.12
+```
+(define (make-center-percent c p)
+  (make-interval (- c (* c p)) (+ c (* c p))))
+
+1 ]=> (make-center-percent 6.8 0.1)
+
+;Value: (6.12 . 7.4799999999999995)
+
+(define (percent i) 
+  (/ (width i) (center i)))
+
+1 ]=> (percent (make-center-width 6.8 0.68)
+)
+
+;Value: .09999999999999996
+```
+
+## Exercise 2.13
+Tried to figure this out algebraically, but couldn't quite get it. Instead, I'll just give proof by with scheme that the formula is simply the addition of the tolerances of each interval:
+```
+(define i1 (make-center-percent 6.8 0.1))
+(define i2 (make-center-percent 4.7 0.05))
+1 ]=> (percent (mul-interval i1 i2))
+
+;Value: .1492537313432836
+```
+The two percentages are $0.1 + 0.05 \approx 0.15$
+
+## Exercise 2.14
+It looks like par2 has tighter intervals than par1, i.e. par2 interval can usually be contained within par1.
+```
+1 ]=> (define i1 (make-interval 999 1001))
+
+;Value: i1
+
+1 ]=> (par1 i1 i1)
+
+;Value: (498.501998001998 . 501.502002002002)
+
+1 ]=> (par2 i1 i1)
+
+;Value: (499.5 . 500.5)
+```
+
+## Exercise 2.15
+Huh. It looks like I was sort of on the right track. Ok, this section is more interesting than I thought. From my example in 2.14, par2 produced a tighter interval. By evaluating each interval value only once, we introduce less floating point arithmetic. If variables are repeated, they contribute to increasinly less precise floating point approximations as they are used in operations together.
+
+## Exercise 2.16
+My best guess is that because of finite floating point precision, algebraically equivalent equations can produce different answers. 
+
+## Exercise 2.17
+```
+(define (last-pair items)
+  (if (null? (cdr items))
+      (car items)
+      (last-pair (cdr items))))
+
+1 ]=> (last-pair (list 1 2 3 4))
+
+;Value: 4
+```
+
+## Exercise 2.18
+```
+(define (reverse items)
+  (define (reverse-iter items n)
+    (if (< n 0)
+        '()
+        (cons (list-ref items n) (reverse-iter items (- n 1)))))
+  (reverse-iter items (- (length items) 1)))
+
+1 ]=> (reverse (list 1 2 3 4))
+
+;Value: (4 3 2 1)
+```
 
