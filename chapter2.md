@@ -352,6 +352,7 @@ My best guess is that because of finite floating point precision, algebraically 
 ```
 
 ## Exercise 2.18
+I'm sure there's some clever recursive way to do this. But this sure is better to my eyes than the typical way to reverse a linked list with pointers.
 ```
 (define (reverse items)
   (define (reverse-iter items n)
@@ -363,6 +364,16 @@ My best guess is that because of finite floating point precision, algebraically 
 1 ]=> (reverse (list 1 2 3 4))
 
 ;Value: (4 3 2 1)
+```
+
+Here's another iterative implementation based on seeing exercise 2.22:
+```
+(define (reverse items)
+  (define (reverse-iter items answer)
+    (if (null? items)
+        answer
+        (reverse-iter (cdr items) (cons (car items) answer))))
+(reverse-iter items '()))
 ```
 
 ## Exercise 2.19
@@ -408,3 +419,64 @@ This was a fun one. Depending on the parity of the first item in the list, I the
 
 ```
 
+## Exercise 2.21
+```
+(define (square-list items)
+  (if (null? items)
+      nil
+      (cons (square (car items)) (square-list (cdr items)))))
+
+(define (square-list items)
+  (map (lambda (x) (square x)) items))
+```
+## Exercise 2.22
+For the first implementatio of `square-list`, the problem lies in that each iteration, Louis is prepedening the square of each item in the list to `answer`. And since answer starts at nil, he is building his list of squares backwards. Here is a substition example showing this:
+
+```
+(square-list (list 1 2 3))
+(iter (list 1 2 3) nil)
+(iter (cdr (list 1 2 3)) (cons (square (car (list 1 2 3))) nil))
+(iter (cdr (list 2 3)) (cons (square (car (list 2 3))) (list 1)))
+(iter (cdr (list 3)) (cons (square (car (list 3))) (cons 4 (list 1))))
+```
+We can see that `answer` is forming a backwards list of squares, with `(cons 4 (list 1))`.
+
+The second implementation is wrong because Louis created a list with nil nested in the middle:
+```
+1 ]=> (square-list (list 1 2 3))
+
+;Value: (((() . 1) . 4) . 9)
+```
+This is because we start by prepending nil to the square of the first item of the list, then consing that with the square of the next item of the list, etc. Here is a substition example showing this:
+
+```
+(square-list (list 1 2 3))
+(iter (list 1 2 3) nil)
+(iter (cdr (list 1 2 3)) (cons nil (square (car (list 1 2 3)))))
+(iter (cdr (list 2 3)) (cons (list () 1) (square (car (list 2 3)))))
+(iter (cdr (list 3)) (cons (cons (list () 1) 4) (square (car (list 3)))))
+```
+We can see `answer` has formed into `(cons (cons (list () 1) 4)`, or `((() 1) 4)`.
+
+## Exercise 2.23
+It works, but I check `null?` twice. I don't know how to do two evaluations in an if clause. Whatever.
+```
+(define (for-each proc items)
+  (do-proc proc items)
+  (if (null? items)
+      true
+      (for-each proc (cdr items))))
+
+(define (do-proc proc items)
+  (if (null? items)
+      true
+      (proc (car items))))
+
+1 ]=> (for-each (lambda (x) (newline) (display x))
+          (list 57 321 88))
+
+57
+321
+88
+;Value: #t
+```

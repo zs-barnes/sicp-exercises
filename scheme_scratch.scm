@@ -636,3 +636,77 @@
   (if (f (car items))
       (car items)
       (cdr items)))
+
+
+(define (map proc items)
+  (if (null? items)
+      '()
+      (cons (proc (car items)) 
+            (map proc (cdr items)))))
+
+(define (square-list items)
+  (if (null? items)
+      nil
+      (cons (square (car items)) (square-list (cdr items)))))
+
+(define (square-list items)
+  (map (lambda (x) (square x)) items))
+
+(define (square-list items)
+  (define (iter things answer)
+    (if (null? things)
+        answer
+        (iter (cdr things) 
+              (cons (square (car things))
+                    answer))))
+  (iter items nil))
+
+(define (square-list items)
+  (define (iter things answer)
+    (if (null? things)
+        answer
+        (iter (cdr things) 
+              (cons (square (car things))
+                    answer))))
+  (iter items nil))
+
+  (square-list (list 1 2 3))
+  (iter (list 1 2 3) nil)
+  (iter (cdr (list 1 2 3)) (cons (square (car (list 1 2 3))) nil))
+  (iter (cdr (list 2 3)) (cons (square (car (list 2 3))) (list 1)))
+  (iter (cdr (list 3)) (cons (square (car (list 3))) (cons 4 (list 1))))
+
+(define (square-list items)
+  (define (iter things answer)
+    (if (null? things)
+        answer
+        (iter (cdr things)
+              (cons answer
+                    (square (car things))))))
+  (iter items nil))
+
+(square-list (list 1 2 3))
+(iter (list 1 2 3) nil)
+(iter (cdr (list 1 2 3)) (cons nil (square (car (list 1 2 3)))))
+(iter (cdr (list 2 3)) (cons (list () 1) (square (car (list 2 3)))))
+(iter (cdr (list 3)) (cons (cons (list () 1) 4) (square (car (list 3)))))
+
+
+(define (reverse items)
+  (define (reverse-iter items answer)
+    (if (null? items)
+        answer
+        (reverse-iter (cdr items) (cons (car items) answer))))
+(reverse-iter items '()))
+
+
+(define (for-each proc items)
+  (do-proc proc items)
+  (if (null? items)
+      true
+      (for-each proc (cdr items))))
+
+(define (do-proc proc items)
+  (if (null? items)
+      true
+      (proc (car items))))
