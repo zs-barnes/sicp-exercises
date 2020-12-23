@@ -596,3 +596,43 @@
   (reverse-iter items (- (length items) 1)))
 
 (reverse (list 1 2 3 4))
+
+(define (no-more? values) (null? values))
+(define (except-first-denomination values) (cdr values))
+(define (first-denomination values) (car values))
+
+
+(define us-coins (list 50 25 10 5 1))
+(define uk-coins (list 100 50 20 10 5 2 1 0.5))
+
+(define (cc amount coin-values)
+  (cond ((= amount 0) 1)
+        ((or (< amount 0) (no-more? coin-values)) 0)
+        (else
+         (+ (cc amount
+                (except-first-denomination coin-values))
+            (cc (- amount
+                   (first-denomination coin-values))
+                coin-values)))))
+
+(define us-coins (list 1 5 10 25 50))
+
+(define (same-parity first . items)
+  (if (even? first)
+      (cons first (get-parity even? items))
+      (cons first (get-parity odd? items))))
+
+(define (get-parity f items)
+  (if (null? items)
+      '()
+      (if (f (car items))
+        (cons (car items) (get-parity f (cdr items)))
+        (get-parity f (cdr items))))))
+
+(same-parity 1 2 3 4 5 6 7)
+(same-parity 2 3 4 5 6 7)
+
+(define (par f items)
+  (if (f (car items))
+      (car items)
+      (cdr items)))

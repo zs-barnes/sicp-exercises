@@ -365,3 +365,46 @@ My best guess is that because of finite floating point precision, algebraically 
 ;Value: (4 3 2 1)
 ```
 
+## Exercise 2.19
+```
+(define (no-more? values) (null? values))
+(define (except-first-denomination values) (cdr values))
+(define (first-denomination values) (car values))
+```
+Order doesn't matter:
+```
+1 ]=> (define us-coins (list 1 5 10 25 50))
+
+;Value: us-coins
+
+1 ]=> (cc 100 us-coins)
+
+;Value: 292
+```
+The order doesn't matter because in the recursive rules, we are adding the number of ways to an amount a can me made by increasing the number of types of coins. Since addition is commutative, we can add the number of types of coins and their total combinations in any way we want.
+
+## Exercise 2.20
+This was a fun one. Depending on the parity of the first item in the list, I then pass that parity check function (even? or odd?) to get-parity, which does a filter of items using the parity of the first int.
+```
+(define (same-parity first . items)
+  (if (even? first)
+      (cons first (get-parity even? items))
+      (cons first (get-parity odd? items))))
+
+(define (get-parity f items)
+  (if (null? items)
+      '()
+      (if (f (car items))
+        (cons (car items) (get-parity f (cdr items)))
+        (get-parity f (cdr items))))))
+      
+1 ]=> (same-parity 1 2 3 4 5 6 7)
+
+;Value: (1 3 5 7)
+
+1 ]=> (same-parity 2 3 4 5 6 7)
+
+;Value: (2 4 6)
+
+```
+
