@@ -710,3 +710,42 @@
   (if (null? items)
       true
       (proc (car items))))
+
+(cdr (1 3 (5 7) 9))
+
+(list 1 2 (list 5 7) 9)
+(cdr (car (cdr (cdr (list 1 2 (list 5 7) 9) ))))
+((7))
+
+(1 (2 (3 (4 (5 (6 7))))))
+
+(car (car (list (list 7))))
+
+(define long-list (list 1 (list 2 (list 3 (list 4 (list 5 (list 6 7)))))))
+(cadr (cadr (cadr (cadr (cadr (cadr long-list))))))
+
+((2 (3 (4 (5 (6 7))))))
+
+(define (reverse items)
+  (define (reverse-iter items answer)
+    (if (null? items)
+        answer
+        (reverse-iter (cdr items) (cons (car items) answer))))
+(reverse-iter items '()))
+
+(define (reverse items)
+  (define (reverse-iter items answer)
+    (cond ((null? items) answer)
+          ((not (pair? items)) ())
+          (else (reverse-iter (cdr items) (cons (car items) answer)))))
+(reverse-iter items '()))
+
+(define (deep-reverse items)
+  (cond ((null? items) '())
+        ((not (pair? items)) items)
+        (else (append (deep-reverse (cdr items)) (list (deep-reverse (car items)))))))
+
+
+(list (deep-reverse (car (1 2))))
+(list (deep-reverse (car (1 2))))
+(list 1)

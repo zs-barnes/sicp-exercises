@@ -352,7 +352,14 @@ My best guess is that because of finite floating point precision, algebraically 
 ```
 
 ## Exercise 2.18
-I'm sure there's some clever recursive way to do this. But this sure is better to my eyes than the typical way to reverse a linked list with pointers.
+
+```
+(define (reverse items)
+  (if (null? items)
+      '()
+      (append (reverse (cdr items)) (list (car items)))))
+```
+Iterative version:
 ```
 (define (reverse items)
   (define (reverse-iter items n)
@@ -480,3 +487,69 @@ It works, but I check `null?` twice. I don't know how to do two evaluations in a
 88
 ;Value: #t
 ```
+
+## Exercise 2.24
+```
+1 ]=> (list 1 (list 2 (list 3 4)))
+
+;Value: (1 (2 (3 4)))
+```
+
+## Exercise 2.25
+
+```
+1 ]=> (list 1 2 (list 5 7) 9)
+
+;Value: (1 2 (5 7) 9)
+
+1 ]=> (cdr (car (cdr (cdr (list 1 2 (list 5 7) 9) ))))
+
+;Value: (7)
+
+1 ]=> (list (list 7))
+
+;Value: ((7))
+
+1 ]=> (car (car (list (list 7))))
+
+;Value: 7
+
+1 ]=> (list 1 (list 2 (list 3 (list 4 (list 5 (list 6 7))))))
+
+;Value: (1 (2 (3 (4 (5 (6 7))))))
+
+(define long-list (list 1 (list 2 (list 3 (list 4 (list 5 (list 6 7)))))))
+
+1 ]=> (cadr (cadr (cadr (cadr (cadr (cadr long-list))))))
+
+;Value: 7
+```
+
+## Exercise 2.26
+```
+1 ]=> (append x y)
+
+;Value: (1 2 3 4 5 6)
+
+1 ]=> (cons x y)
+
+;Value: ((1 2 3) 4 5 6)
+
+1 ]=> (list x y)
+
+;Value: ((1 2 3) (4 5 6))
+```
+
+## Exercise 2.27
+Phew this one was mind-bending. I knew I had to use `pair?`, but I didn't know what to return. The only thing I could think of returning was `items` in the case where `items` was not a pair, and I got it to work accidently! After thinking it through, the third line treats a pair with only ints the same as it would treat a pair with pairs as it elements. If you take it through with the substition model for a pair with only ints, say (1 2), `deep-reverse` evaluates to (2 1). 
+```
+(define (deep-reverse items)
+  (cond ((null? items) '())
+        ((not (pair? items)) items)
+        (else (append (deep-reverse (cdr items)) (list (deep-reverse (car items)))))))
+
+1 ]=> (deep-reverse x)
+
+;Value: ((4 3) (2 1))
+```
+
