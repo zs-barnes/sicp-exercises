@@ -546,10 +546,126 @@ Phew this one was mind-bending. I knew I had to use `pair?`, but I didn't know w
 (define (deep-reverse items)
   (cond ((null? items) '())
         ((not (pair? items)) items)
-        (else (append (deep-reverse (cdr items)) (list (deep-reverse (car items)))))))
+        (else (append (deep-reverse (cdr items)) 
+                      (list (deep-reverse (car items)))))))
 
 1 ]=> (deep-reverse x)
 
 ;Value: ((4 3) (2 1))
 ```
+## Exercise 2.28
+Just a slight variation to `deep-reverse`.
+```
+(define (fringe items)
+  (cond ((null? items) '())
+        ((not (pair? items)) (list items))
+        (else (append (fringe (car items)) (fringe (cdr items))))))
 
+;Value: fringe
+
+1 ]=> 
+
+;Value: (1 2 3 4)
+
+1 ]=> (fringe (list x x))
+
+;Value: (1 2 3 4 1 2 3 4)
+```
+
+## Exercise 2.29
+a) 
+```
+(define (left-branch mobile)
+  (car mobile))
+
+(define (right-branch mobile)
+  (cadr mobile))
+
+(define (branch-length structure)
+  (car structure))
+
+(define (branch-structure structure)
+  (cadr structure))
+```
+
+b)
+This took longer than I would have hoped. It took me forever to realize that I have to check for a way to distinguish between mobiles and branches. The easiest way it seems it to check if the `branch-length` is a pair or not. If its not a pair, that means it is a branch, so we need to find the total-weight of that branch. 
+
+```
+(define (total-weight mobile)
+  (cond ((not (pair? mobile)) mobile)
+        ((not (pair? (branch-length mobile))) (total-weight (branch-structure mobile)))
+        (else (+ (total-weight (left-branch mobile))
+                 (total-weight (right-branch mobile))))))
+
+(define m (make-mobile (make-branch 1 4) (make-branch 1 5)))
+(define m2 (make-mobile (make-branch 1 m) (make-branch 1 m)))
+
+1 ]=> m
+
+;Value: ((1 4) (1 5))
+
+1 ]=> m2
+
+;Value: ((1 ((1 4) (1 5))) (1 ((1 4) (1 5))))
+
+1 ]=> (total-weight m)
+
+;Value: 9
+
+1 ]=> (total-weight m2)
+
+;Value: 18
+```
+c)
+```
+(define (torque mobile)
+  (cond ((not (pair? mobile)) mobile)
+        ((not (pair? (branch-length mobile))) (* (branch-length mobile) 
+                                                 (torque (branch-structure mobile))))
+        (else (+ (torque (left-branch mobile))
+                 (torque (right-branch mobile))))))
+                 
+(define (balanced mobile)
+  (cond ((not (pair? (branch-length mobile))) (torque mobile))
+      (else (= (balanced (left-branch mobile)) 
+               (balanced (right-branch mobile))))))
+
+(define (balanced mobile)
+  (if (not (pair? (branch-length mobile))) 
+      (torque mobile)
+      (= (balanced (left-branch mobile)) 
+          (balanced (right-branch mobile)))))
+
+(define m (make-mobile (make-branch 2 4) (make-branch 1 8)))
+(define m1 (make-mobile (make-branch 3 2) (make-branch 2 3)))
+(define m2 (make-mobile (make-branch 1 m1) (make-branch 1 m)))
+(define m3 (make-mobile (make-branch 6 m) (make-branch 7 m1)))
+
+1 ]=> (balanced m)
+
+;Value: #t
+
+1 ]=> (balanced m1)
+
+;Value: #t
+
+1 ]=> (balanced m2)
+
+;Value: #f
+
+1 ]=> (balanced m3)
+
+;Value: #t
+
+```
+
+d) Because we've defined our data in terms of constructors and selectors, we don't have to change much when the underlying `list` pairs become `cons` pairs, we just have to change `cadr` to `cdr` in the selectors.
+
+```
+(define (right-branch mobile)
+  (cdr mobile))
+
+(define (branch-structure structure)
+  (cdr structure))
+```

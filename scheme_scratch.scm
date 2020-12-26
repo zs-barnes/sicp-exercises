@@ -743,9 +743,93 @@
 (define (deep-reverse items)
   (cond ((null? items) '())
         ((not (pair? items)) items)
-        (else (append (deep-reverse (cdr items)) (list (deep-reverse (car items)))))))
+        (else (append (deep-reverse (cdr items)) 
+                      (list (deep-reverse (car items)))))))
 
 
 (list (deep-reverse (car (1 2))))
 (list (deep-reverse (car (1 2))))
 (list 1)
+
+(define (reverse items)
+  (if (null? items)
+      '()
+      (cons (reverse (cdr items)) (list (car items)))))
+
+(define (fringe items)
+  (cond ((null? items) '())
+        ((not (pair? items)) (list items))
+        (else (append (fringe (car items)) (fringe (cdr items))))))
+
+(fringe x)
+
+(define (left-branch mobile)
+  (car mobile))
+
+(define (right-branch mobile)
+  (cadr mobile))
+
+(define (branch-length structure)
+  (car structure))
+
+(define (branch-structure structure)
+  (cadr structure))
+
+(right-branch (make-mobile (make-branch 1 2) (make-branch 2 3)))
+
+(define (total-weight mobile)
+  (cond ((not (pair? mobile)) mobile)
+        ((not (pair? (branch-length mobile))) (total-weight (branch-structure mobile)))
+        (else (+ (total-weight (left-branch mobile))
+                 (total-weight (right-branch mobile))))))
+
+(define m (make-mobile (make-branch 1 4) (make-branch 2 5)))
+(define m2 (make-mobile (make-branch 2 m) (make-branch 1 m)))
+(total-weight (make-mobile (make-branch 1 2) (make-branch 2 3)))
+(right-branch m2)
+(total-weight m2)
+(total-weight m)
+
+(left-branch (branch-structure m))
+(branch-structure (right-branch (branch-structure (right-branch m2))))
+(branch-structure (left-branch m2))
+
+(define (torque mobile)
+  (cond ((not (pair? mobile)) mobile)
+        ((not (pair? (branch-length mobile))) (* (branch-length mobile) 
+                                                 (torque (branch-structure mobile))))
+        (else (+ (torque (left-branch mobile))
+                 (torque (right-branch mobile))))))
+
+(define (balanced mobile)
+  (if (not (pair? (branch-length mobile))) 
+      (torque mobile)
+      (= (balanced (left-branch mobile)) 
+          (balanced (right-branch mobile)))))
+
+
+(torque m2)
+(balanced m)
+
+(define m (make-mobile (make-branch 2 4) (make-branch 1 8)))
+(define m1 (make-mobile (make-branch 3 2) (make-branch 2 3)))
+(define m2 (make-mobile (make-branch 1 m1) (make-branch 1 m)))
+(define m3 (make-mobile (make-branch 6 m) (make-branch 7 m1)))
+
+
+(define (make-mobile left right)
+  (cons left right))
+(define (make-branch length structure)
+  (cons length structure))
+
+(define (left-branch mobile)
+  (car mobile))
+
+(define (right-branch mobile)
+  (cdr mobile))
+
+(define (branch-length structure)
+  (car structure))
+
+(define (branch-structure structure)
+  (cdr structure))
