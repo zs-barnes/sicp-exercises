@@ -833,3 +833,84 @@
 
 (define (branch-structure structure)
   (cdr structure))
+
+(square-tree
+ (list 1
+       (list 2 (list 3 4) 5)
+       (list 6 7)))
+
+(define l (list 1
+       (list 2 (list 3 4) 5)
+       (list 6 7)))
+
+(define (square-tree items)
+  (cond ((null? items) '())
+        ((not (pair? items)) (square items))
+        (else (cons (square-tree (car items))
+                    (square-tree (cdr items))))))
+
+(define (map proc items)
+  (if (null? items) 
+      '()
+      (cons (proc (car items)) 
+            (map proc (cdr items)))))
+
+(define (tree-map proc items)
+  (map (lambda (sub-tree) 
+              (if (pair? sub-tree)
+                  (tree-map proc sub-tree)
+                  (proc sub-tree))) 
+        items))
+
+(define (square-tree items)
+  (tree-map square items))
+
+(define (subsets s)
+  (if (null? s)
+      (list nil)
+      (let ((rest (subsets (cdr s))))
+        (append rest (map (lambda (x) (if (null? x)  s (list (car s)))) rest)))))
+
+(subsets (list 1 2 3 4 5 6))
+(subsets (list 1 2 3))
+(subsets (list 1 2))
+(rest (subsets (cdr (list 1))))
+(rest (subsets '()))
+(rest )
+
+(define (subsets s)
+  (if (null? s)
+      (list nil)
+      (let ((rest (subsets (cdr s))))
+        (append rest (map (lambda (x) (cons (car s) x)) rest)))))
+
+(define (map p sequence)
+  (accumulate (lambda (x y) (cons (p x) y)) nil sequence))
+
+(define (append seq1 seq2)
+  (accumulate cons seq2 seq1))
+
+(define (length sequence)
+  (accumulate (lambda (x y) (+ 1 y)) 0 sequence))
+
+(define (accumulate op initial seq)
+  (if (null? seq)
+      initial
+      (op (car seq) (accumulate op initial (cdr seq)))))
+(accumulate * 1 (list 1 2 3))
+
+(map square (list 1 2 3))
+(append (list 1 2 3) (list 4 5 6))
+(length (list 1 2 3))
+
+(op (car seq) (accumulate op initial (cdr seq)))
+(op 1 (accumulate op initial (cdr seq)))
+(op 1 (op 2 (0)))
+(+ 1 (+ 1 0))
+
+(define (horner-eval x coefficient-sequence)
+  (accumulate (lambda (this-coeff higher-terms) <??>)
+              0
+              coefficient-sequence))
+
+(horner-eval 2 (list 1 3 0 5 0 1))
