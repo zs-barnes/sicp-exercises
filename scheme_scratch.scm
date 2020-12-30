@@ -909,8 +909,28 @@
 (+ 1 (+ 1 0))
 
 (define (horner-eval x coefficient-sequence)
-  (accumulate (lambda (this-coeff higher-terms) <??>)
+  (accumulate (lambda (this-coeff higher-terms) (+ this-coeff (* x higher-terms)))
               0
               coefficient-sequence))
 
 (horner-eval 2 (list 1 3 0 5 0 1))
+
+(define (count-leaves x)
+  (cond ((null? x) 0)  
+        ((not (pair? x)) 1)
+        (else (+ (count-leaves (car x))
+                 (count-leaves (cdr x))))))
+
+(define (enumerate-tree tree)
+  (cond ((null? tree) nil)
+        ((not (pair? tree)) (list tree))
+        (else (append (enumerate-tree (car tree))
+                      (enumerate-tree (cdr tree))))))
+
+(define (count-leaves t)
+  (accumulate (lambda (x y) (+ 1 y)) 0 (enumerate-tree t)))
+
+(define tree (cons (list 1 2) (list 3 4)))
+
+(count-leaves tree)
+(count-leaves (list tree tree))

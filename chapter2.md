@@ -437,7 +437,7 @@ This was a fun one. Depending on the parity of the first item in the list, I the
   (map (lambda (x) (square x)) items))
 ```
 ## Exercise 2.22
-For the first implementatio of `square-list`, the problem lies in that each iteration, Louis is prepedening the square of each item in the list to `answer`. And since answer starts at nil, he is building his list of squares backwards. Here is a substition example showing this:
+For the first implementatio of `square-list`, the problem lies in that each iteration, Louis is prepending the square of each item in the list to `answer`. And since answer starts at nil, he is building his list of squares backwards. Here is a substition example showing this:
 
 ```
 (square-list (list 1 2 3))
@@ -627,11 +627,6 @@ c)
                  (torque (right-branch mobile))))))
                  
 (define (balanced mobile)
-  (cond ((not (pair? (branch-length mobile))) (torque mobile))
-      (else (= (balanced (left-branch mobile)) 
-               (balanced (right-branch mobile))))))
-
-(define (balanced mobile)
   (if (not (pair? (branch-length mobile))) 
       (torque mobile)
       (= (balanced (left-branch mobile)) 
@@ -668,4 +663,83 @@ d) Because we've defined our data in terms of constructors and selectors, we don
 
 (define (branch-structure structure)
   (cdr structure))
+```
+## Exercise 2.30
+```
+(define (square-tree items)
+  (cond ((null? items) '())
+        ((not (pair? items)) (square items))
+        (else (cons (square-tree (car items))
+                    (square-tree (cdr items))))))
+
+(define (square-tree items)
+  (map (lambda (sub-tree) 
+              (if (pair? sub-tree)
+                  (square-tree sub-tree)
+                  (square sub-tree))) 
+        items))
+```
+
+## Exercise 2.31
+```
+(define (tree-map proc items)
+  (map (lambda (sub-tree) 
+              (if (pair? sub-tree)
+                  (tree-map proc sub-tree)
+                  (proc sub-tree))) 
+        items))
+
+(define (square-tree items)
+  (tree-map square items))
+```
+
+## Exercise 2.32  
+
+```
+(define (subsets s)
+  (if (null? s)
+      (list nil)
+      (let ((rest (subsets (cdr s))))
+        (append rest (map (lambda (x) (cons (car s) x)) rest)))))
+```
+
+## Exercise 2.33
+```
+(define (map p sequence)
+  (accumulate (lambda (x y) (cons (p x) y)) nil sequence))
+
+(define (append seq1 seq2)
+  (accumulate cons seq2 seq1))
+
+(define (length sequence)
+  (accumulate (lambda (x y) (+ 1 y)) 0 sequence))
+```
+
+## Exercise 2.34
+I just had to stare at Horner's rule for a while to see the pattern. $a_{0}$ is `this-coeff`, and we add $a_{0}$ to x times the higher terms. This translates seamlessly into the lambda function.
+```
+(define (horner-eval x coefficient-sequence)
+  (accumulate (lambda (this-coeff higher-terms) (+ this-coeff (* x higher-terms)))
+              0
+              coefficient-sequence))
+1 ]=> (horner-eval 2 (list 1 3 0 5 0 1))
+
+;Value: 79
+```
+
+## Exercise 2.35
+Hm, I'm not sure this example needs `map`. It complicates it more than it needs to. Simply using `enumerate-tree` worked well enough. 
+```
+(define (count-leaves t)
+  (accumulate (lambda (x y) (+ 1 y)) 0 (enumerate-tree t)))
+
+(define tree (cons (list 1 2) (list 3 4)))
+
+1 ]=>  (count-leaves tree)
+
+;Value: 4
+
+1 ]=>   (count-leaves (list tree tree))
+
+;Value: 8
 ```
