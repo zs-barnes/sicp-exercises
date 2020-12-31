@@ -743,3 +743,22 @@ Hm, I'm not sure this example needs `map`. It complicates it more than it needs 
 
 ;Value: 8
 ```
+
+## Exercise 2.36
+Short and fun exercise.
+```
+(define (accumulate-n op init seqs)
+  (if (null? (car seqs))
+      nil
+      (cons (accumulate op init (map (lambda (seq) (car seq)) seqs))
+            (accumulate-n op init (map (lambda (seq) (cdr seq)) seqs)))))
+(define s  (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12)))
+
+1 ]=> s
+
+;Value: ((1 2 3) (4 5 6) (7 8 9) (10 11 12))
+
+1 ]=> (accumulate-n + 0 s)
+
+;Value: (22 26 30)
+```
