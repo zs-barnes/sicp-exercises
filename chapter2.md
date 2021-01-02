@@ -762,3 +762,37 @@ Short and fun exercise.
 
 ;Value: (22 26 30)
 ```
+
+## Exercise 2.37
+Because of the name-space clash, I renamed the non-built-in `map` as `map2`
+```
+(define (matrix-*-vector m v)
+  (map2 (lambda (row) (dot-product v row)) m))
+
+(define m (list (list 1 2 3) (list 4 5 6) (list 7 8 9)))
+(define v (list 2 2 2))
+
+1 ]=> (matrix-*-vector m v)
+
+;Value: (12 30 48)
+```
+The idea here is taking the nth element of each row vector, and making that a new row vector. In the below example, the row vector's 1st element is  1, 4, 7, so we create the row vector (1 4 7) as the transpose row. 
+```
+(define (transpose mat)
+  (accumulate-n cons '() mat))
+
+1 ]=> m
+
+;Value: ((1 2 3) (4 5 6) (7 8 9))
+
+1 ]=> (transpose m)
+
+;Value: ((1 4 7) (2 5 8) (3 6 9))
+```
+This was satisfying. The key insight is that `matrix-*-vector` returns a vector, so we multiply and map each row of the first matrix `m` by the transpose of `n`. 
+```
+(define (matrix-*-matrix m n)
+  (let ((cols (transpose n)))
+    (map2 (lambda (row) (matrix-*-vector cols row)) m)))
+```
+If I hadn't had linear algebra, I doubt I would have the intuition to do these problems.

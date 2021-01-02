@@ -946,3 +946,43 @@
 
 (accumulate + 0 (map (lambda (seq) (car seq)) s))
 (map (lambda (seq) (cdr seq)) s)
+
+(define (accumulate op initial seq)
+  (if (null? seq)
+      initial
+      (op (car seq) (accumulate op initial (cdr seq)))))
+
+(define (dot-product v w)
+  (accumulate + 0 (map * v w)))
+
+(define (matrix-*-vector m v)
+  (map2 (lambda (row) (dot-product v row)) m))
+
+(define (transpose mat)
+  (accumulate-n cons '() mat))
+
+(define (matrix-*-matrix m n)
+  (let ((cols (transpose n)))
+    (map2 (lambda (row) (matrix-*-vector cols row)) m)))
+
+(matrix-*-matrix m m)
+(matrix-*-vector (transpose m) (list 1 2 3))
+(define (map2 proc items)
+  (if (null? items) 
+      '()
+      (cons (proc (car items)) 
+            (map2 proc (cdr items)))))
+
+
+(define m (list (list 1 2 3) (list 4 5 6) (list 7 8 9)))
+(define v (list 2 2 2 2))
+(matrix-*-vector m v)
+
+(transpose m)
+
+(define (accumulate-n op init seqs)
+  (if (null? (car seqs))
+      '()
+      (cons (accumulate op init (map2 (lambda (seq) (car seq)) seqs))
+            (accumulate-n op init (map2 (lambda (seq) (cdr seq)) seqs)))))
+
