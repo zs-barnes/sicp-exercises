@@ -796,3 +796,23 @@ This was satisfying. The key insight is that `matrix-*-vector` returns a vector,
     (map2 (lambda (row) (matrix-*-vector cols row)) m)))
 ```
 If I hadn't had linear algebra, I doubt I would have the intuition to do these problems.
+
+## Exercise 2.38
+```
+1 ]=> (fold-right / 1 (list 1 2 3))
+
+;Value: 3/2
+
+1 ]=> (fold-left / 1 (list 1 2 3))
+
+;Value: 1/6
+
+1 ]=> (fold-right list nil (list 1 2 3))
+
+;Value: (1 (2 (3 ())))
+
+1 ]=> (fold-left list nil (list 1 2 3))
+
+;Value: (((() 1) 2) 3)
+```
+I'd say for arithmetic operations, it should be commutative. Actually, this makes sense for non-arithmetic operations as well. The operation takes in two expressions () (), and if the it doesn't matter what order you place the expressions, then the operation is commutative. 
