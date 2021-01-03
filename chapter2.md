@@ -816,3 +816,13 @@ If I hadn't had linear algebra, I doubt I would have the intuition to do these p
 ;Value: (((() 1) 2) 3)
 ```
 I'd say for arithmetic operations, it should be commutative. Actually, this makes sense for non-arithmetic operations as well. The operation takes in two expressions () (), and if the it doesn't matter what order you place the expressions, then the operation is commutative. 
+
+## Exercise 2.39
+`fold-left` was way easier to figure out than `fold-right`. I think I have 5 + ways to reverse a list now. 
+```
+(define (reverse sequence)
+  (fold-right (lambda (x y) (append y (list x))) nil sequence))
+
+(define (reverse sequence)
+  (fold-left (lambda (x y) (cons y x)) nil sequence))
+```
