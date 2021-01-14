@@ -826,3 +826,26 @@ I'd say for arithmetic operations, it should be commutative. Actually, this make
 (define (reverse sequence)
   (fold-left (lambda (x y) (cons y x)) nil sequence))
 ```
+
+## Exercise 2.40
+```
+(define (unique-pairs n)
+  (accumulate append
+              nil
+              (map (lambda (i)
+                    (map (lambda (j) (list i j))
+                          (enumerate-interval 1 (- i 1))))
+                  (enumerate-interval 1 n))))
+```
+
+Updating our definition of `prime-sum-pairs`:
+```
+(define (prime-sum-pairs n)
+  (map make-pair-sum
+       (filter prime-sum?
+               (unique-pairs n))))
+
+1 ]=> (prime-sum-pairs 5)
+
+;Value: ((2 1 3) (3 2 5) (4 1 5) (4 3 7) (5 2 7))
+```
