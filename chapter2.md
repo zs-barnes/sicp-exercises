@@ -849,3 +849,24 @@ Updating our definition of `prime-sum-pairs`:
 
 ;Value: ((2 1 3) (3 2 5) (4 1 5) (4 3 7) (5 2 7))
 ```
+
+## Exercise 2.41
+This one was tough. I got the basic structure of `unique-triples`, but I was getting a lot of empty lists. I peeked for a hint and realized I should be using flatmap. That fixed the problem, and the rest wrote itself.
+```
+(define (unique-triples n)
+  (flatmap (lambda (i)
+            (flatmap (lambda (j) 
+              (map (lambda (k) (list i j k))
+                   (enumerate-interval 1 (- j 1))))
+              (enumerate-interval 1 (- i 1))))
+  (enumerate-interval 1 n)))
+
+(define (integer-sum-triple n s)
+  (filter (lambda (seq) (= (accumulate + 0 seq) s))
+      (unique-triples n)))
+
+1 ]=> (integer-sum-triple 5 7)
+
+;Value: ((4 2 1))
+
+```

@@ -1038,7 +1038,7 @@
 
 (define (make-pair-sum pair)
   (list (car pair) (cadr pair) (+ (car pair) (cadr pair))))
-  
+
 (define (smallest-divisor n)
   (find-divisor n 2))
 (define (find-divisor n test-divisor)
@@ -1052,4 +1052,47 @@
 (define (prime? n)
   (= n (smallest-divisor n)))
 
-(prime-sum-pairs 3)
+(prime-sum-pairs 5)
+
+(define (unique-triples n)
+  (accumulate append
+              nil
+              (map (lambda (i) (map (lambda (j) (list i j)) (enumerate-interval 1 (- i 1)))) (enumerate-interval 1 n))))
+
+(define (unique-pairs n)
+  (accumulate append
+              nil
+              (map (lambda (i)
+                    (map (lambda (j) (list i j))
+                          (enumerate-interval 1 (- i 1))))
+                  (enumerate-interval 1 n))))
+
+(define (unique-triples n)
+  (flatmap (lambda (i)
+            (flatmap (lambda (j) 
+              (map (lambda (k) (list i j k))
+                   (enumerate-interval 1 (- j 1))))
+              (enumerate-interval 1 (- i 1))))
+  (enumerate-interval 1 n)))
+
+(define (equal-sum? triple s)
+  (= (+ (car triple) (cadr triple) (cadr (cdr triple))) s))
+
+(cadr (cdr (list 1 2 3)))
+
+(define (flatmap proc seq)
+  (accumulate append nil (map proc seq)))
+(define (unique-pairs n)
+  (accumulate append
+              nil
+              (map (lambda (i)
+                    (map (lambda (j) (list i j))
+                          (enumerate-interval 1 (- i 1))))
+                  (enumerate-interval 1 n))))
+(unique-triples 5)
+
+(define (integer-sum-triple n s)
+  (filter (lambda (seq) (= (accumulate + 0 seq) s))
+      (unique-triples n)))
+
+(integer-sum-triple 6 6)
