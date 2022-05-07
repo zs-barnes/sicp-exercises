@@ -1096,3 +1096,107 @@
       (unique-triples n)))
 
 (integer-sum-triple 6 6)
+
+(define (unique-pairs n)
+              (flatmap (lambda (i)
+                    (map (lambda (j) (list i j))
+                          (enumerate-interval 1 (- i 1))))
+                  (enumerate-interval 1 n)))
+
+(define (fib n)
+  (cond 
+  ((= n 0) 0)
+  ((= n 1) 1)
+  (else (+ (fib (- n 1)) (fib (- n))))
+  )
+)
+(accumulate append
+            nil
+            (map (lambda (i)
+                   (map (lambda (j) (list i j))
+                        (enumerate-interval 1 (- i 1))))
+                 (enumerate-interval 1 3)))
+(define thing (accumulate append
+            nil
+            (map (lambda (i)
+                   (map (lambda (j) (list i j))
+                        (enumerate-interval 1 (- i 1))))
+                 (enumerate-interval 1 3))))
+
+(define (queens board-size)
+  (define (queen-cols k)  
+    (if (= k 0)
+        (list empty-board)
+        (filter
+         (lambda (positions) (safe? k positions))
+         (flatmap 
+          (lambda (rest-of-queens)
+            (map (lambda (new-row)
+                   (adjoin-position new-row k rest-of-queens))
+                 (enumerate-interval 1 board-size)))
+          (queen-cols (- k 1))))))
+  (queen-cols board-size))
+
+(define empty-board (list nil))
+
+(define (safe? k positions) 
+  (newline)
+  (map (lambda (pair) (display pair))
+    positions)
+)
+
+(define (adjoin-position new-row k rest-of-queens)
+  (map (lambda (position) 
+          (append position (list (list new-row k))))
+        rest-of-queens))
+
+
+(enumerate-interval 1 8)
+
+((1 1) (1 2) (1 3) (1 4) (1 5) (1 6) (1 7) (1 8))
+
+(flatmap 
+        (lambda (rest-of-queens)
+            (map (lambda (new-row)
+                   (adjoin-position new-row 2 rest-of-queens))
+                 (enumerate-interval 1 2)))
+          (list empty-board))
+
+# without filter
+(define (queens board-size)
+  (define (queen-cols k)  
+    (if (= k 0)
+        (list empty-board)
+         (flatmap 
+          (lambda (rest-of-queens)
+            (map (lambda (new-row)
+                   (adjoin-position new-row k rest-of-queens))
+                 (enumerate-interval 1 board-size)))
+          (queen-cols (- k 1)))))
+  (queen-cols board-size))
+
+(define q2 (queens 2))
+ (car (cdr (car (car q2))))
+ (cdr (car q2))
+
+
+(define (equal? a b)
+  (cond ((and (not (pair? a)) (not (pair? b))) (eq? a b))
+        ((and (pair? a) (pair? b)) 
+          (and (equal? (car a) (car b)) (equal? (cdr a) (cdr b))))
+        (else false)
+  )
+)
+
+
+(define (myequal? a b)
+  (cond ((and (symbol? a) (symbol? b)) (eq? a b))
+        ((and (pair? a) (pair? b)) 
+          true)
+  )
+)
+
+(myequal? 'thisisalist 'thisisalist)
+(myequal? '(this is a list) '(this is a list))
+(myequal? '(this '() a list) '(this is a list))
+

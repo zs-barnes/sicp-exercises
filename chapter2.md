@@ -870,3 +870,45 @@ This one was tough. I got the basic structure of `unique-triples`, but I was get
 ;Value: ((4 2 1))
 
 ```
+
+Coming back to 2.42-2.52
+
+## Exercise 2.53
+
+`(list 'a 'b 'c)` (a b c)
+
+`(list (list 'george))` ((george))
+
+`(cdr '((x1 x2) (y1 y2)))` ((y1 y2))
+
+`(cadr '((x1 x2) (y1 y2)))` (y1 y2)
+
+`(pair? (car '(a short list)))` false
+
+`(memq 'red '((red shoes) (blue socks)))` false
+
+`(memq 'red '(red shoes blue socks))` (red shoes blue socks)
+
+
+## Exercise 2.54
+```
+(define (myequal? a b)
+  (cond ((and (not (pair? a)) (not (pair? b))) (eq? a b))
+        ((and (pair? a) (pair? b)) 
+          (and (myequal? (car a) (car b)) (myequal? (cdr a) (cdr b))))
+        (else false))
+)
+
+1 ]=> (myequal? '(this is a list) '(this is a list))
+
+;Value: #t
+
+1 ]=> (myequal? '(this '() a list) '(this is a list))
+
+;Value: #f
+
+1 ]=> (myequal? 'thisisalist 'thisisalist)
+
+;Value: #t
+```
+
