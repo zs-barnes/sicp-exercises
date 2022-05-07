@@ -911,4 +911,8 @@ Coming back to 2.42-2.52
 
 ;Value: #t
 ```
-
+## Exercise 2.25
+The evaluator returns the value "quote" becuase the interpretor turns ' into "quote".
+Since there are two quotes, the first evaluates to the symbol abracadabra, and is the second element of the list, 
+while quote becomes the first element of the list, so car returns quote. 
+So (car ''abracadabra) becomes (car (quote (quote abracadabra))), which both evalute to quote.
