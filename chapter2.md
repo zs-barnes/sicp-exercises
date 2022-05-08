@@ -911,8 +911,51 @@ Coming back to 2.42-2.52
 
 ;Value: #t
 ```
-## Exercise 2.25
+## Exercise 2.55
 The evaluator returns the value "quote" becuase the interpretor turns ' into "quote".
 Since there are two quotes, the first evaluates to the symbol abracadabra, and is the second element of the list, 
 while quote becomes the first element of the list, so car returns quote. 
 So (car ''abracadabra) becomes (car (quote (quote abracadabra))), which both evalute to quote.
+
+## Exercise 2.56
+Pretty straightforward, just extending the deriv function.
+```
+(define (deriv exp var)
+  (cond ((number? exp) 0)
+        ((variable? exp)
+         (if (same-variable? exp var) 1 0))
+        ((sum? exp)
+         (make-sum (deriv (addend exp) var)
+                   (deriv (augend exp) var)))
+        ((product? exp)
+         (make-sum
+           (make-product (multiplier exp)
+                         (deriv (multiplicand exp) var))
+           (make-product (deriv (multiplier exp) var)
+                         (multiplicand exp))))
+        ((exponentiation? exp)
+          (make-product
+            (make-product 
+              (exponent exp)
+              (make-exponentiation (base exp) 
+                                    (- (exponent exp) 1)))
+            (deriv (base exp) var)))
+        (else
+         (error "unknown expression type -- DERIV" exp))))
+
+(define (exponentiation? exp)
+  (and (pair? exp) (eq? (car exp) '**)))
+
+(define (exponent e) (caddr e))
+(define (base e) (cadr e))
+
+(define (make-exponentiation b e)
+  (cond ((=number? e 0) 1)
+        ((=number? e 1) b)
+        (else (list '** b e))))
+
+
+1 ]=> (deriv '(+ (* a (** x 2))  (* b x) c) 'x)
+
+;Value: (+ (* a (* 2 x)) b)
+```
