@@ -1,14 +1,14 @@
 
 ## Exercise 2.1 
 The key to this was taking the absolute value of the gcd. 
-```
+```scheme
 (define (make-rat n d)
   (let ((g (abs(gcd n d))))
     (if (or (and (> n 0) (< d 0)) (and (< n 0) (< d 0))) 
         (cons (/ (* n -1) g) (/ (* d -1) g))
         (cons (/ n g) (/ d g)))))
 ```
-```
+```scheme
 1 ]=> (make-rat 4 -8)
 
 ;Value: (-1 . 2)
@@ -28,7 +28,7 @@ The key to this was taking the absolute value of the gcd.
 
 ## Exercise 2.2
 This was a fun one.
-```
+```scheme
 (define (make-segment p1 p2) (cons p1 p2))
 (define (start-segment s) (car s))
 (define (end-segment s) (cdr s))
@@ -44,7 +44,7 @@ This was a fun one.
         (make-point (average x1 x2) (average y1 y2))))
 ```
 Test:
-```
+```scheme
 (define point-1 (make-point -1 2))
 (define point-2 (make-point 3 -6))
 (define segment (make-segment point-1 point-2))
@@ -55,13 +55,13 @@ Test:
 
 ## Exercise 2.3
 I define a rectangle using just two segments:
-```
+```scheme
 (define (make-rect s1 s2) (cons s1 s2))
 (define (first-rect-seg rect) (car rect))
 (define (second-rect-seg rect) (cdr rect))
 ```
 To calculate the perimeter and area, I first had to create `seg-length`, which implements the distance formula. 
-```
+```scheme
 (define (seg-length s)
   (let ((x1 (x-point (start-segment s)))
         (x2 (x-point (end-segment s)))
@@ -82,7 +82,7 @@ To calculate the perimeter and area, I first had to create `seg-length`, which i
 ```
 
 Tests: 
-```
+```scheme
 (define point-1 (make-point 0 0))
 (define point-2 (make-point 0 3))
 (define seg-1 (make-segment point-1 point-2))
@@ -93,7 +93,7 @@ Tests:
 
 (define my-rect (make-rect seg-1 seg-2))
 ```
-```
+```scheme
 1 ]=> (perimeter my-rect)
 
 ;Value: 14
@@ -104,7 +104,7 @@ Tests:
 ```
 
 Here is a different underlying representation of a rectangle, which takes in four points: 
-```
+```scheme
 (define (make-rect p1 p2 p3 p4) 
   (cons (cons p1 p2) (cons p2 p3)) (cons (cons p3 p4) (cons p4 p1)))
 
@@ -115,7 +115,7 @@ Here is a different underlying representation of a rectangle, which takes in fou
   (make-segment (car (cdr rect)) (cdr (cdr rect))))
 ```
 Now, without chaning our perimeter and area functions, we can test with a new rectangle:
-```
+```scheme
 (define point-1 (make-point 0 0))
 (define point-2 (make-point 0 4))
 (define point-3 (make-point 5 4))
@@ -134,7 +134,7 @@ Now, without chaning our perimeter and area functions, we can test with a new re
 
 ## Exercise 2.4
 Using the substition model, we can show this representation yields x for car:
-```
+```scheme
 (car (cons x y))
 ((cons x y) (lambda (p q) p))
 ((lambda (m) (m x y)) (lambda (p q) p))
@@ -142,12 +142,12 @@ Using the substition model, we can show this representation yields x for car:
 x
 ```
 cdr definition:
-```
+```scheme
 (define (cdr z)
   (z (lambda (p q) q)))
 ```
 Substition for cdr:
-```
+```scheme
 (cdr (cons x y))
 ((cons x y) (lambda (p q) q))
 ((lambda (m) (m x y)) (lambda (p q) q))
@@ -160,7 +160,7 @@ The insight here was that we can figure out a one item in a pair from an integer
 
 I've implemented this process in `count-divisions`. For `car` we use base 2, and for `cdr` we use base 3.
 
-```
+```scheme
 (define (cons a b)
 (* (expt 2 a) (expt 3 b)))
 
@@ -176,7 +176,7 @@ I've implemented this process in `count-divisions`. For `car` we use base 2, and
     0))
 ```
 Tests:
-```
+```scheme
 1 ]=> (car (cons 82 73))
 
 ;Value: 82
@@ -188,7 +188,7 @@ Tests:
 
 ## Exercise 2.6
 Derivation for `one` in Church numerals using the substitution model:
-```
+```scheme
 (add-1 zero)
 (lambda (f) (lambda (x) (f ((zero f) x))))
 (lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) x)) f) x))))
@@ -199,7 +199,7 @@ Derivation for `one` in Church numerals using the substitution model:
 ```
 
 Now that we have `one` we can derive `two` similarly:
-```
+```scheme
 (add-1 two)
 (lambda (f) (lambda (x) (f ((one f) x))))
 (lambda (f) (lambda (x) (f (((lambda (f) (lambda (x) (f x))) f) x))))
@@ -216,26 +216,26 @@ $$ 2 = \lambda f.\lambda x.f\ (f\ x) $$
 
 The definition of add is beyond me..
 I implemented what wikipedia gave for an addition with Church numerals:
-```
+```scheme
 (define (+ m n)
   (lambda (m) (lambda (n) (lambda (f) (lambda (x) (f (n (f x))))))))
 ```
 It seemed to do its thing:
-```
+```scheme
 1 ]=> (+ one two)
 
 ;Value: #[compound-procedure 14]
 ```
 
 ## Exercise 2.7
-```
+```scheme
 (define (lower-bound interval) (car interval))
 (define (upper-bound interval) (cdr interval))
 ```
 
 ## Exercise 2.8
 Subtraction is not commutative, so order matters here. 
-```
+```scheme
 (define (sub-interval x y)
   (make-interval (- (lower-bound x) (lower-bound y)) 
                  (- (upper-bound x) (upper-bound y))))
@@ -269,7 +269,7 @@ $= \dfrac{(U_{1} + U_{2}) + (- L_{1} - L_{2})}{2} = \dfrac{(U_{1} + U_{2}) - (L_
 Which is the width of summing the two intervals. 
 
 ## Exercise 2.10
-```
+```scheme
 (define (div-interval x y)
   (if (or (= (upper-bound y) 0) 
           (= (lower-bound y) 0))
@@ -289,7 +289,7 @@ Which is the width of summing the two intervals.
 Ben Bitdiddle: You are too cryptic for me.
 
 ## Exercise 2.12
-```
+```scheme
 (define (make-center-percent c p)
   (make-interval (- c (* c p)) (+ c (* c p))))
 
@@ -308,7 +308,7 @@ Ben Bitdiddle: You are too cryptic for me.
 
 ## Exercise 2.13
 Tried to figure this out algebraically, but couldn't quite get it. Instead, I'll just give proof by with scheme that the formula is simply the addition of the tolerances of each interval:
-```
+```scheme
 (define i1 (make-center-percent 6.8 0.1))
 (define i2 (make-center-percent 4.7 0.05))
 1 ]=> (percent (mul-interval i1 i2))
@@ -319,7 +319,7 @@ The two percentages are $0.1 + 0.05 \approx 0.15$
 
 ## Exercise 2.14
 It looks like par2 has tighter intervals than par1, i.e. par2 interval can usually be contained within par1.
-```
+```scheme
 1 ]=> (define i1 (make-interval 999 1001))
 
 ;Value: i1
@@ -340,7 +340,7 @@ Huh. It looks like I was sort of on the right track. Ok, this section is more in
 My best guess is that because of finite floating point precision, algebraically equivalent equations can produce different answers. 
 
 ## Exercise 2.17
-```
+```scheme
 (define (last-pair items)
   (if (null? (cdr items))
       (car items)
@@ -353,14 +353,14 @@ My best guess is that because of finite floating point precision, algebraically 
 
 ## Exercise 2.18
 
-```
+```scheme
 (define (reverse items)
   (if (null? items)
       '()
       (append (reverse (cdr items)) (list (car items)))))
 ```
 Iterative version:
-```
+```scheme
 (define (reverse items)
   (define (reverse-iter items n)
     (if (< n 0)
@@ -374,7 +374,7 @@ Iterative version:
 ```
 
 Here's another iterative implementation based on seeing exercise 2.22:
-```
+```scheme
 (define (reverse items)
   (define (reverse-iter items answer)
     (if (null? items)
@@ -384,13 +384,13 @@ Here's another iterative implementation based on seeing exercise 2.22:
 ```
 
 ## Exercise 2.19
-```
+```scheme
 (define (no-more? values) (null? values))
 (define (except-first-denomination values) (cdr values))
 (define (first-denomination values) (car values))
 ```
 Order doesn't matter:
-```
+```scheme
 1 ]=> (define us-coins (list 1 5 10 25 50))
 
 ;Value: us-coins
@@ -403,7 +403,7 @@ The order doesn't matter because in the recursive rules, we are adding the numbe
 
 ## Exercise 2.20
 This was a fun one. Depending on the parity of the first item in the list, I then pass that parity check function (even? or odd?) to get-parity, which does a filter of items using the parity of the first int.
-```
+```scheme
 (define (same-parity first . items)
   (if (even? first)
       (cons first (get-parity even? items))
@@ -427,7 +427,7 @@ This was a fun one. Depending on the parity of the first item in the list, I the
 ```
 
 ## Exercise 2.21
-```
+```scheme
 (define (square-list items)
   (if (null? items)
       nil
@@ -439,7 +439,7 @@ This was a fun one. Depending on the parity of the first item in the list, I the
 ## Exercise 2.22
 For the first implementatio of `square-list`, the problem lies in that each iteration, Louis is prepending the square of each item in the list to `answer`. And since answer starts at nil, he is building his list of squares backwards. Here is a substition example showing this:
 
-```
+```scheme
 (square-list (list 1 2 3))
 (iter (list 1 2 3) nil)
 (iter (cdr (list 1 2 3)) (cons (square (car (list 1 2 3))) nil))
@@ -449,14 +449,14 @@ For the first implementatio of `square-list`, the problem lies in that each iter
 We can see that `answer` is forming a backwards list of squares, with `(cons 4 (list 1))`.
 
 The second implementation is wrong because Louis created a list with nil nested in the middle:
-```
+```scheme
 1 ]=> (square-list (list 1 2 3))
 
 ;Value: (((() . 1) . 4) . 9)
 ```
 This is because we start by prepending nil to the square of the first item of the list, then consing that with the square of the next item of the list, etc. Here is a substition example showing this:
 
-```
+```scheme
 (square-list (list 1 2 3))
 (iter (list 1 2 3) nil)
 (iter (cdr (list 1 2 3)) (cons nil (square (car (list 1 2 3)))))
@@ -467,7 +467,7 @@ We can see `answer` has formed into `(cons (cons (list () 1) 4)`, or `((() 1) 4)
 
 ## Exercise 2.23
 It works, but I check `null?` twice. I don't know how to do two evaluations in an if clause. Whatever.
-```
+```scheme
 (define (for-each proc items)
   (do-proc proc items)
   (if (null? items)
@@ -489,7 +489,7 @@ It works, but I check `null?` twice. I don't know how to do two evaluations in a
 ```
 
 ## Exercise 2.24
-```
+```scheme
 1 ]=> (list 1 (list 2 (list 3 4)))
 
 ;Value: (1 (2 (3 4)))
@@ -497,7 +497,7 @@ It works, but I check `null?` twice. I don't know how to do two evaluations in a
 
 ## Exercise 2.25
 
-```
+```scheme
 1 ]=> (list 1 2 (list 5 7) 9)
 
 ;Value: (1 2 (5 7) 9)
@@ -526,7 +526,7 @@ It works, but I check `null?` twice. I don't know how to do two evaluations in a
 ```
 
 ## Exercise 2.26
-```
+```scheme
 1 ]=> (append x y)
 
 ;Value: (1 2 3 4 5 6)
@@ -542,7 +542,7 @@ It works, but I check `null?` twice. I don't know how to do two evaluations in a
 
 ## Exercise 2.27
 Phew this one was mind-bending. I knew I had to use `pair?`, but I didn't know what to return. The only thing I could think of returning was `items` in the case where `items` was not a pair, and I got it to work accidently! After thinking it through, the third line treats a pair with only ints the same as it would treat a pair with pairs as it elements. If you take it through with the substition model for a pair with only ints, say (1 2), `deep-reverse` evaluates to (2 1). 
-```
+```scheme
 (define (deep-reverse items)
   (cond ((null? items) '())
         ((not (pair? items)) items)
@@ -555,7 +555,7 @@ Phew this one was mind-bending. I knew I had to use `pair?`, but I didn't know w
 ```
 ## Exercise 2.28
 Just a slight variation to `deep-reverse`.
-```
+```scheme
 (define (fringe items)
   (cond ((null? items) '())
         ((not (pair? items)) (list items))
@@ -574,7 +574,7 @@ Just a slight variation to `deep-reverse`.
 
 ## Exercise 2.29
 a) 
-```
+```scheme
 (define (left-branch mobile)
   (car mobile))
 
@@ -591,7 +591,7 @@ a)
 b)
 This took longer than I would have hoped. It took me forever to realize that I have to check for a way to distinguish between mobiles and branches. The easiest way it seems it to check if the `branch-length` is a pair or not. If its not a pair, that means it is a branch, so we need to find the total-weight of that branch. 
 
-```
+```scheme
 (define (total-weight mobile)
   (cond ((not (pair? mobile)) mobile)
         ((not (pair? (branch-length mobile))) (total-weight (branch-structure mobile)))
@@ -618,7 +618,7 @@ This took longer than I would have hoped. It took me forever to realize that I h
 ;Value: 18
 ```
 c)
-```
+```scheme
 (define (torque mobile)
   (cond ((not (pair? mobile)) mobile)
         ((not (pair? (branch-length mobile))) (* (branch-length mobile) 
@@ -657,7 +657,7 @@ c)
 
 d) Because we've defined our data in terms of constructors and selectors, we don't have to change much when the underlying `list` pairs become `cons` pairs, we just have to change `cadr` to `cdr` in the selectors.
 
-```
+```scheme
 (define (right-branch mobile)
   (cdr mobile))
 
@@ -665,7 +665,7 @@ d) Because we've defined our data in terms of constructors and selectors, we don
   (cdr structure))
 ```
 ## Exercise 2.30
-```
+```scheme
 (define (square-tree items)
   (cond ((null? items) '())
         ((not (pair? items)) (square items))
@@ -681,7 +681,7 @@ d) Because we've defined our data in terms of constructors and selectors, we don
 ```
 
 ## Exercise 2.31
-```
+```scheme
 (define (tree-map proc items)
   (map (lambda (sub-tree) 
               (if (pair? sub-tree)
@@ -695,7 +695,7 @@ d) Because we've defined our data in terms of constructors and selectors, we don
 
 ## Exercise 2.32  
 
-```
+```scheme
 (define (subsets s)
   (if (null? s)
       (list nil)
@@ -704,7 +704,7 @@ d) Because we've defined our data in terms of constructors and selectors, we don
 ```
 
 ## Exercise 2.33
-```
+```scheme
 (define (map p sequence)
   (accumulate (lambda (x y) (cons (p x) y)) nil sequence))
 
@@ -717,7 +717,7 @@ d) Because we've defined our data in terms of constructors and selectors, we don
 
 ## Exercise 2.34
 I just had to stare at Horner's rule for a while to see the pattern. $a_{0}$ is `this-coeff`, and we add $a_{0}$ to x times the higher terms. This translates seamlessly into the lambda function.
-```
+```scheme
 (define (horner-eval x coefficient-sequence)
   (accumulate (lambda (this-coeff higher-terms) (+ this-coeff (* x higher-terms)))
               0
@@ -729,7 +729,7 @@ I just had to stare at Horner's rule for a while to see the pattern. $a_{0}$ is 
 
 ## Exercise 2.35
 Hm, I'm not sure this example needs `map`. It complicates it more than it needs to. Simply using `enumerate-tree` worked well enough. 
-```
+```scheme
 (define (count-leaves t)
   (accumulate (lambda (x y) (+ 1 y)) 0 (enumerate-tree t)))
 
@@ -746,7 +746,7 @@ Hm, I'm not sure this example needs `map`. It complicates it more than it needs 
 
 ## Exercise 2.36
 Short and fun exercise.
-```
+```scheme
 (define (accumulate-n op init seqs)
   (if (null? (car seqs))
       nil
@@ -765,7 +765,7 @@ Short and fun exercise.
 
 ## Exercise 2.37
 Because of the name-space clash, I renamed the non-built-in `map` as `map2`
-```
+```scheme
 (define (matrix-*-vector m v)
   (map2 (lambda (row) (dot-product v row)) m))
 
@@ -777,7 +777,7 @@ Because of the name-space clash, I renamed the non-built-in `map` as `map2`
 ;Value: (12 30 48)
 ```
 The idea here is taking the nth element of each row vector, and making that a new row vector. In the below example, the row vector's 1st element is  1, 4, 7, so we create the row vector (1 4 7) as the transpose row. 
-```
+```scheme
 (define (transpose mat)
   (accumulate-n cons '() mat))
 
@@ -790,7 +790,7 @@ The idea here is taking the nth element of each row vector, and making that a ne
 ;Value: ((1 4 7) (2 5 8) (3 6 9))
 ```
 This was satisfying. The key insight is that `matrix-*-vector` returns a vector, so we multiply and map each row of the first matrix `m` by the transpose of `n`. 
-```
+```scheme
 (define (matrix-*-matrix m n)
   (let ((cols (transpose n)))
     (map2 (lambda (row) (matrix-*-vector cols row)) m)))
@@ -798,7 +798,7 @@ This was satisfying. The key insight is that `matrix-*-vector` returns a vector,
 If I hadn't had linear algebra, I doubt I would have the intuition to do these problems.
 
 ## Exercise 2.38
-```
+```scheme
 1 ]=> (fold-right / 1 (list 1 2 3))
 
 ;Value: 3/2
@@ -819,7 +819,7 @@ I'd say for arithmetic operations, it should be commutative. Actually, this make
 
 ## Exercise 2.39
 `fold-left` was way easier to figure out than `fold-right`. I think I have 5 + ways to reverse a list now. 
-```
+```scheme
 (define (reverse sequence)
   (fold-right (lambda (x y) (append y (list x))) nil sequence))
 
@@ -828,7 +828,7 @@ I'd say for arithmetic operations, it should be commutative. Actually, this make
 ```
 
 ## Exercise 2.40
-```
+```scheme
 (define (unique-pairs n)
   (accumulate append
               nil
@@ -852,7 +852,7 @@ Updating our definition of `prime-sum-pairs`:
 
 ## Exercise 2.41
 This one was tough. I got the basic structure of `unique-triples`, but I was getting a lot of empty lists. I peeked for a hint and realized I should be using flatmap. That fixed the problem, and the rest wrote itself.
-```
+```scheme
 (define (unique-triples n)
   (flatmap (lambda (i)
             (flatmap (lambda (j) 
@@ -891,7 +891,7 @@ Coming back to 2.42-2.52
 
 
 ## Exercise 2.54
-```
+```scheme
 (define (myequal? a b)
   (cond ((and (not (pair? a)) (not (pair? b))) (eq? a b))
         ((and (pair? a) (pair? b)) 
@@ -919,7 +919,7 @@ So (car ''abracadabra) becomes (car (quote (quote abracadabra))), which both eva
 
 ## Exercise 2.56
 Pretty straightforward, just extending the deriv function.
-```
+```scheme
 (define (deriv exp var)
   (cond ((number? exp) 0)
         ((variable? exp)
