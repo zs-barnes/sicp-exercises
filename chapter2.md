@@ -959,3 +959,17 @@ Pretty straightforward, just extending the deriv function.
 
 ;Value: (+ (* a (* 2 x)) b)
 ```
+
+## Exercise 2.57
+We check if there is a fourth item in the list, otherwise we add/multiply remaining expressions together.
+```scheme
+(define (augend s)
+(if (null? (cdddr s))
+    (caddr s)
+    (make-sum (addend (cdr s)) (augend (cdr s)))))
+
+(define (multiplicand s)
+(if (null? (cdddr s))
+    (caddr s)
+    (make-product (multiplier (cdr s)) (multiplicand (cdr s)))))
+```
