@@ -1356,5 +1356,19 @@ derivative with respect to x is 4
         ((=number? m2 1) m1)
         ((and (number? m1) (number? m2)) (* m1 m2))
         (else (list m1 '* m2))))
-        
+
 (deriv '(x + (3 * (x + (y + 2)))) 'x)
+
+(define (intersection-set set1 set2)
+  (cond ((or (null? set1) (null? set2)) '())
+        ((element-of-set? (car set1) set2)        
+         (cons (car set1)
+               (intersection-set (cdr set1) set2)))
+        (else (intersection-set (cdr set1) set2))))
+
+(define (union-set set1 set2)
+  (cond ((null? set1) set2)
+        ((element-of-set? (car set1) set2)        
+         (union-set (cdr set1) set2))
+        (else (cons (car set1)
+               (union-set (cdr set1) set2)))))

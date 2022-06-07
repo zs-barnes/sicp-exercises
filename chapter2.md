@@ -839,7 +839,7 @@ I'd say for arithmetic operations, it should be commutative. Actually, this make
 ```
 
 Updating our definition of `prime-sum-pairs`:
-```
+```scheme
 (define (prime-sum-pairs n)
   (map make-pair-sum
        (filter prime-sum?
@@ -1023,3 +1023,16 @@ So the derivative with respect to x is 4.
 ;Value: 4
 ```
 b. meh
+
+## Exercise 2.59
+A variation on intersection-set. Checks if the element in the first set is in the second set, and only adds that element if its not in the 
+second set. Once the first set is checked, add the second set to the end. This assumes both are distinct sets to begin with.
+
+```scheme
+(define (union-set set1 set2)
+  (cond ((null? set1) set2)
+        ((element-of-set? (car set1) set2)        
+         (union-set (cdr set1) set2))
+        (else (cons (car set1)
+               (union-set (cdr set1) set2)))))
+```
