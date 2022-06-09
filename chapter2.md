@@ -1034,5 +1034,75 @@ second set. Once the first set is checked, add the second set to the end. This a
         ((element-of-set? (car set1) set2)        
          (union-set (cdr set1) set2))
         (else (cons (car set1)
-               (union-set (cdr set1) set2)))))
+                    (union-set (cdr set1) set2)))))
+
+1 ]=> (define x (list 1 2 3))
+
+;Value: x
+
+1 ]=> (define y (list 3 4 5))
+
+;Value: y
+
+1 ]=> (union-set x y)
+
+;Value: (1 2 3 4 5)
+```
+
+## Exercise 2.60
+`element-of-set` is the same as before, 
+`adjoin-set` is now just cons since we don't check for duplicates:
+```scheme
+(define (adjoin-set x set) (cons x set))
+```
+Will come back to the rest.
+
+## Exercise 2.61
+
+```scheme
+(define (adjoin-set x set)
+  (cond ((or (< x (car set)) (null? set) (cons x set)))
+        ((= x (car set)) set )
+        (else (adjoin-set x (cdr set)))))
+
+1 ]=> (adjoin-set 3 (list 1 2 5 6))
+
+;Value: (3 1 2 5 6)
+```
+
+## Exercise 2.62
+Variation on intersection-set again, just changing the behavior when null,
+and when a set has a value that is less than the other set, cons that value.
+
+Is O(n) because the sets get smaller and smaller each iteration.
+
+```scheme
+(define (union-set set1 set2)
+  (cond ((null? set1) set2)
+        ((null? set2) set1)
+      ((let ((x1 (car set1)) (x2 (car set2)))
+        (cond ((= x1 x2)
+               (cons x1
+                     (union-set (cdr set1)
+                                       (cdr set2))))
+              ((< x1 x2)
+               (cons x1 (union-set (cdr set1) set2)))
+              ((< x2 x1)
+               (cons x2 (union-set set1 (cdr set2)))))))))
+
+1 ]=> (define x (list 1 2 3))
+
+;Value: x
+
+1 ]=> (define y (list 3 4 5))
+
+;Value: y
+
+1 ]=> (union-set x y)
+
+;Value: (1 2 3 4 5)
+
+1 ]=> (union-set y x)
+
+;Value: (1 2 3 4 5)
 ```
